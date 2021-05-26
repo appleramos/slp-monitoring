@@ -22,8 +22,11 @@ const UserInput = ({ onSubmit }) => {
   return (
     <div
       style={{
-        width:'50%',
-        margin: 'auto'
+        margin: 'auto',
+        backgroundColor: '#24283512',
+        borderRadius: '15px',
+        padding: '25px 25px 1px 25px',
+        marginBottom: '25px'
       }}
     >
       <Form 
@@ -42,7 +45,7 @@ const UserInput = ({ onSubmit }) => {
           name="address"
           rules={[{ required: true, message: 'Please input player adrress' }]}
         >
-          <Input />
+          <Input placeholder="Etherium address"/>
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
