@@ -1,9 +1,11 @@
 import './App.css';
 import 'antd/dist/antd.css'
-import React, { useState, useEffect, } from 'react'
-import axios from 'axios'
+import React, { useState, } from 'react'
+import { filter } from 'lodash'
 
-import { Table } from 'antd'
+import { Table, Tooltip, Button } from 'antd'
+import { DeleteOutlined } from '@ant-design/icons';
+
 import UserInput from './components/UserInput'
 import RowComp from './components/RowComp';
 
@@ -11,23 +13,36 @@ function App() {
   const storagePlayers = JSON.parse(window.localStorage.getItem('players')) || { value: [] }
   const [ players, setPlayers ] = useState(storagePlayers)
 
-  const renderSlp = (_, player) => {
-    const fetchData = async () => {
-      const result = await axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`);
-      return result.data.total || 0
-    }
- 
-    return fetchData() || 0
+  const renderAddress = (text) => {
+    const firstDigits = text.substring(0, 4)
+    const lastDigits = text.substring(text.length - 5, text.length)
+    return `${firstDigits}...${lastDigits}`
   }
-  
+
+  const renderButton = (_, record) => {
+    return (
+      <Tooltip title="Delete">
+        <Button 
+          type="link" 
+          danger 
+          icon={<DeleteOutlined />} 
+          onClick={ () => deletePlayer(record) }
+        />
+      </Tooltip>
+    )
+  }
   const columns = [
+    {
+      title: 'Action',
+      render: renderButton
+    },
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'SLP',
+      title: 'Total SLP',
       dataIndex: 'slp',
       key: 'slp',
       render: (_, record) => <RowComp address={ record.address }/>
@@ -36,41 +51,27 @@ function App() {
       title: 'Address',
       dataIndex: 'address',
       key: 'address',
+      render: renderAddress
     },
-  ];
-
-  // useEffect(() => {
-  //   getSlps()
-  // })
+  ]
 
   const handleSubmit = (players) => {
     setPlayers(players)
   }
 
-  // const getSlps = () => {
-  //   players.value.forEach(player => {
-  //     if (!player.slp) {
-  //       const res = fetchData(player)
-  //       if (res.data) {
-  //         player.slp = res.data.total
-  //       }
-  //     }
-  //   })
-  //   setPlayers(players)
-  //  }
-
-  // const fetchData = async (player) => {
-  //   const result = await axios(
-  //     `https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`,
-  //   )
-  //   return result.data
-  // }
+  const deletePlayer = (player) => {
+    const newPlayers = filter(players.value, (p) => p.key !== player.key) //players.value.splice(index, 1)
+    setPlayers({value: newPlayers})
+    window.localStorage.setItem('players', JSON.stringify({value: newPlayers}))
+  }
 
   return (
     <div 
       className="App"
       style={{
-        padding: '100px'
+        paddingTop: '40px',
+        maxWidth: '80%',
+        margin: 'auto'
       }}
     >
       <UserInput onSubmit={ handleSubmit }/>

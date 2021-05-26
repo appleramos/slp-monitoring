@@ -1,5 +1,7 @@
 import React, {useState, useEffect,} from 'react'
 import axios from 'axios'
+import numeral from 'numeral'
+
 const RowComp = ({ address }) => {
   const [ result, setResult ] = useState('-')
   useEffect(() => {
@@ -15,7 +17,7 @@ const RowComp = ({ address }) => {
 
   return (
     <div>
-      { result }
+      { numeral(result).format('0,0') }
     </div>
   )
 }
