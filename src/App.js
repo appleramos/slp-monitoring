@@ -7,7 +7,7 @@ import { Table, Tooltip, Button } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons';
 
 import UserInput from './components/UserInput'
-import RowComp from './components/RowComp';
+import DataRow from './components/DataRow';
 
 function App() {
   const storagePlayers = JSON.parse(window.localStorage.getItem('players')) || { value: [] }
@@ -42,10 +42,10 @@ function App() {
       key: 'name',
     },
     {
-      title: 'Total SLP',
+      title: 'Player Data',
       dataIndex: 'slp',
       key: 'slp',
-      render: (_, record) => <RowComp address={ record.address }/>
+      render: (_, record) => <DataRow address={ record.address }/>
     },
     {
       title: 'Address',
