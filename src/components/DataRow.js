@@ -22,10 +22,11 @@ const DataRow = ({ address }) => {
   }, ['address'])
 
   const getDailyAvg = () => {
-    const lastClaimDate = moment(Date(lastClaimedAt * 1000))
+    const lastClaimDate = moment(new Date(lastClaimedAt * 1000))
     const dateNow = moment()
     const dateDiff = dateNow.diff(lastClaimDate, 'days')
-    return 'soon'
+
+    return numeral(total/dateDiff).format('0.0')
   }
 
   return (
@@ -34,10 +35,10 @@ const DataRow = ({ address }) => {
         <span style={{ fontWeight: 'bold' }}>Total SLP:&nbsp;</span>
         <span>{ numeral(total).format('0,0') }</span>
       </div>
-      <div>
+      {/* <div>
         <span style={{ fontWeight: 'bold' }}>Claimable SLP:&nbsp;</span>
         <span>{ numeral(claimable).format('0,0') }</span>
-      </div>
+      </div> */}
       <div>
         <span style={{ fontWeight: 'bold' }}>Daily Avg:&nbsp;</span>
         <span>{ getDailyAvg() }</span>
