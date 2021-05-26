@@ -3,8 +3,8 @@ import 'antd/dist/antd.css'
 import React, { useState, } from 'react'
 import { filter } from 'lodash'
 
-import { Table, Tooltip, Button } from 'antd'
-import { DeleteOutlined } from '@ant-design/icons';
+import { Table, Popconfirm, Button, message, } from 'antd'
+import { DeleteOutlined, QuestionCircleOutlined, } from '@ant-design/icons';
 
 import UserInput from './components/UserInput'
 import DataRow from './components/DataRow';
@@ -21,20 +21,23 @@ function App() {
 
   const renderButton = (_, record) => {
     return (
-      <Tooltip title="Delete">
+      <Popconfirm 
+        title={ `Are you sure you want to delete ${record.name}?`}
+        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+        onConfirm={ () => deletePlayer(record) }
+      >
         <Button 
           type="link" 
           danger 
           icon={<DeleteOutlined />} 
-          onClick={ () => deletePlayer(record) }
         />
-      </Tooltip>
+      </Popconfirm>
     )
   }
   const columns = [
     {
       title: 'Action',
-      render: renderButton
+      render: renderButton,
     },
     {
       title: 'Name',
@@ -63,6 +66,7 @@ function App() {
     const newPlayers = filter(players.value, (p) => p.key !== player.key) //players.value.splice(index, 1)
     setPlayers({value: newPlayers})
     window.localStorage.setItem('players', JSON.stringify({value: newPlayers}))
+    message.success(`Success fully deleted ${player.name}`);
   }
 
   return (
