@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { Input, Form, Button, } from 'antd'
+import { Input, Form, Button, message, } from 'antd'
+import { filter } from 'lodash'
 
 const UserInput = ({ onSubmit }) => {
   // const [ form ] = Form.useForm()
@@ -8,6 +9,12 @@ const UserInput = ({ onSubmit }) => {
   const onFinish = (values) => {
     let playersString = window.localStorage.getItem('players')
     let players = JSON.parse(playersString) || { value: [] }
+
+    const existingPlayer = filter(players.value, (player) => player.address === values.address)
+    if (existingPlayer.length > 0) {
+      message.warning('The address you entered is already in the list');
+      return
+    }
 
     players.value.push({
       key: Date.now(),
