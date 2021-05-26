@@ -71,7 +71,7 @@ function App() {
 
   return (
     <div 
-      className="App"
+      className="SLP_Monitoring_App"
       style={{
         paddingTop: '40px',
         maxWidth: '80%',
