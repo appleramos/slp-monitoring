@@ -66,7 +66,7 @@ function App() {
     const newPlayers = filter(players.value, (p) => p.key !== player.key) //players.value.splice(index, 1)
     setPlayers({value: newPlayers})
     window.localStorage.setItem('players', JSON.stringify({value: newPlayers}))
-    message.success(`Success fully deleted ${player.name}`);
+    message.success(`Successfully deleted ${player.name}`);
   }
 
   return (
