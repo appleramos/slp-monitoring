@@ -7,7 +7,7 @@ import numeral from 'numeral'
 import moment from 'moment'
 
 import { Table, Popconfirm, Button, message, } from 'antd'
-import { DeleteOutlined, QuestionCircleOutlined, } from '@ant-design/icons';
+import { DeleteOutlined, QuestionCircleOutlined, RedoOutlined, PlusOutlined, } from '@ant-design/icons';
 
 import UserInput from './components/UserInput'
 
@@ -16,32 +16,44 @@ function App() {
   const [ players, setPlayers ] = useState(storagePlayers)
   const [ playersData, setPlayersData ] = useState([])
   const [ tableLoading, setTableLoading ] = useState(true)
+  const [ isFormVisible, setIsFormVisible ] = useState(false)
 
   useEffect(() => {
     async function fetchData(player) {
-      const res = await axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`)
-      if (res.data) {
-        console.log(playersData)
-        let newPlayersData = playersData
-        const {
-          client_id,
-          total,
-          claimable_total,
-          last_claimed_item_at,
-        } = res.data
-        newPlayersData.push({
-          id: client_id,
-          total: total || 0,
-          claimable: claimable_total || 0,
-          lockedSlp: total - claimable_total,
-          lastClaimedAt: last_claimed_item_at,
-          dailyAvg: getDailyAvg(last_claimed_item_at, total),
-          nextClaimDate: getNextClaimDate(last_claimed_item_at)
-        })
-        setPlayersData(newPlayersData)
-        if (newPlayersData.length === players.value.length) {
-          setTableLoading(false)
+      let newPlayersData = playersData
+      try {
+        const res = await axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`)
+        if (res.data) {
+          const {
+            client_id,
+            total,
+            claimable_total,
+            last_claimed_item_at,
+          } = res.data
+          newPlayersData.push({
+            id: client_id,
+            total: total || 0,
+            claimable: claimable_total || 0,
+            lockedSlp: total - claimable_total,
+            lastClaimedAt: last_claimed_item_at,
+            dailyAvg: getDailyAvg(last_claimed_item_at, total),
+            nextClaimDate: getNextClaimDate(last_claimed_item_at)
+          })
         }
+      } catch (err) {
+        newPlayersData.push({
+          id: `invalid-user-${player.address}`,
+          total: 0,
+          claimable: 0,
+          lockedSlp: 0,
+          lastClaimedAt: moment(),
+          dailyAvg: 0,
+          nextClaimDate: moment()
+        })
+      }
+      setPlayersData(newPlayersData)
+      if (newPlayersData.length === players.value.length) {
+        setTableLoading(false)
       }
     }
     players.value.forEach((player) => {
@@ -168,17 +180,11 @@ function App() {
   ]
 
   const handleSubmit = (player) => {
-    const newPlayers = cloneDeep(players)
-    newPlayers.value.push(player)
-    window.localStorage.setItem('players', JSON.stringify(newPlayers))
-    setPlayers(newPlayers)
-    fetchPlayerData(player)
-  }
-
-  const fetchPlayerData = (player) => {
     setTableLoading(true)
+    const newPlayersData = cloneDeep(playersData)
     axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`)
       .then(res => {
+        const newPlayers = cloneDeep(players)
         if (res.data) {
           const {
             client_id,
@@ -186,7 +192,6 @@ function App() {
             claimable_total,
             last_claimed_item_at,
           } = res.data
-          const newPlayersData = cloneDeep(playersData)
           newPlayersData.push({
             id: client_id,
             total: total || 0,
@@ -196,8 +201,15 @@ function App() {
             dailyAvg: getDailyAvg(last_claimed_item_at, total),
             nextClaimDate: getNextClaimDate(last_claimed_item_at)
           })
-          setPlayersData(newPlayersData)
         }
+        setTableLoading(false)
+        setPlayersData(newPlayersData)
+        newPlayers.value.push(player)
+        window.localStorage.setItem('players', JSON.stringify(newPlayers))
+        setPlayers(newPlayers)
+      })
+      .catch(err => {
+        message.error('You entered an invalid etherium address')
         setTableLoading(false)
       })
   }
@@ -211,6 +223,14 @@ function App() {
     message.success(`Successfully deleted ${player.name}`)
   }
 
+  const handleOpenForm = () => {
+    setIsFormVisible(true)
+  }
+
+  const handleCancelForm = () => {
+    setIsFormVisible(false)
+  }
+
   return (
     <div 
       className="SLP_Monitoring_App"
@@ -221,15 +241,34 @@ function App() {
     >
       <div
         style={{
-          textAlign: 'center',
           fontSize: '1.5em',
           fontWeight: 'bold',
-          marginBottom: '10px'
+          marginBottom: '10px',
+          display: 'flex'
         }}
       >
-        <span>SLP Tracker</span>
+        <div style={{ flexGrow: '3' }}>SLP Tracker</div>
+        <Button 
+          size="large" 
+          shape="circle" 
+          icon={<RedoOutlined />} 
+          style={{ marginRight: '20px' }}
+        />
+        <Button 
+          size="large" 
+          type="primary" 
+          shape="round" 
+          icon={<PlusOutlined />} 
+          onClick={ handleOpenForm }
+        >
+          Isko
+        </Button>
       </div>
-      <UserInput onSubmit={ handleSubmit }/>
+      <UserInput 
+        onSubmit={ handleSubmit } 
+        visible={ isFormVisible }
+        onCancel={ handleCancelForm }
+      />
       <Table 
         loading={ tableLoading }
         dataSource={ players.value }

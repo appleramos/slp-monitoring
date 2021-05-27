@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { Input, Form, Button, message, } from 'antd'
+import { Input, Form, Button, message, Modal, } from 'antd'
 import { filter } from 'lodash'
 
-const UserInput = ({ onSubmit }) => {
-  // const [ form ] = Form.useForm()
+const UserInput = ({ onSubmit, onCancel, visible }) => {
+  const [ form ] = Form.useForm()
 
   const onFinish = (values) => {
     let playersString = window.localStorage.getItem('players')
@@ -21,23 +21,29 @@ const UserInput = ({ onSubmit }) => {
       name: values.name || '',
       address: values.address || ''
     })
-    // form.resetFields()
+    form.resetFields()
+  }
+
+  const handleCancel = () => {
+    onCancel()
+  }
+
+  const handleOk = () => {
+    onFinish(form.getFieldsValue())
   }
 
   return (
-    <div
-      style={{
-        margin: 'auto',
-        backgroundColor: '#24283512',
-        borderRadius: '15px',
-        padding: '25px 25px 1px 25px',
-        marginBottom: '25px',
-        maxWidth: '500px',
-      }}
+    <Modal
+      title="Add an Isko"
+      visible={ visible }
+      onOk={ handleOk } 
+      onCancel={ handleCancel }
+      closable={ false }
     >
       <Form 
-        onFinish={onFinish}
+        onFinish={ onFinish }
         name="axie-user-form"
+        form={form}
       >
         <Form.Item
           name="name"
@@ -51,13 +57,8 @@ const UserInput = ({ onSubmit }) => {
         >
           <Input placeholder="Etherium address *"/>
         </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
       </Form>
-    </div>
+    </Modal>
   )
 }
 
