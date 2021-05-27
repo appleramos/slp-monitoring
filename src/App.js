@@ -14,7 +14,7 @@ function App() {
   const [ players, setPlayers ] = useState(storagePlayers)
 
   const renderAddress = (text) => {
-    const firstDigits = text.substring(0, 4)
+    const firstDigits = text.substring(0, 6)
     const lastDigits = text.substring(text.length - 5, text.length)
     return `${firstDigits}...${lastDigits}`
   }
@@ -38,22 +38,26 @@ function App() {
     {
       title: 'Action',
       render: renderButton,
+      width: '10%'
     },
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+      width: '30%',
     },
     {
       title: 'Player Data',
       dataIndex: 'slp',
       key: 'slp',
+      width: '40%',
       render: (_, record) => <DataRow address={ record.address }/>
     },
     {
       title: 'Address',
       dataIndex: 'address',
       key: 'address',
+      width: '20%',
       render: renderAddress
     },
   ]
@@ -73,11 +77,20 @@ function App() {
     <div 
       className="SLP_Monitoring_App"
       style={{
-        paddingTop: '40px',
-        maxWidth: '80%',
+        padding: '20px',
+        maxWidth: '900px',
         margin: 'auto'
       }}
     >
+      <div
+        style={{
+          textAlign: 'center',
+          fontSize: '1.5em',
+          fontWeight: 'bold'
+        }}
+      >
+        <span>SLP Tracker</span>
+      </div>
       <UserInput onSubmit={ handleSubmit }/>
       <Table 
         dataSource={ players.value }

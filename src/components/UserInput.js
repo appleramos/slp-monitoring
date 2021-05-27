@@ -41,18 +41,16 @@ const UserInput = ({ onSubmit }) => {
         name="axie-user-form"
       >
         <Form.Item
-          label="Name"
           name="name"
           rules={[{ required: true, message: 'Please input player name' }]}
         >
-          <Input />
+          <Input placeholder="Name *"/>
         </Form.Item>
         <Form.Item
-          label="Address"
           name="address"
           rules={[{ required: true, message: 'Please input player adrress' }]}
         >
-          <Input placeholder="Etherium address"/>
+          <Input placeholder="Etherium address *"/>
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
