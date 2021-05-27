@@ -33,7 +33,8 @@ const UserInput = ({ onSubmit }) => {
         backgroundColor: '#24283512',
         borderRadius: '15px',
         padding: '25px 25px 1px 25px',
-        marginBottom: '25px'
+        marginBottom: '25px',
+        maxWidth: '500px',
       }}
     >
       <Form 

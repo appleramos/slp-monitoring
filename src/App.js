@@ -183,8 +183,7 @@ function App() {
     <div 
       className="SLP_Monitoring_App"
       style={{
-        padding: '20px',
-        maxWidth: '900px',
+        padding: '15px 25px',
         margin: 'auto'
       }}
     >
@@ -192,7 +191,8 @@ function App() {
         style={{
           textAlign: 'center',
           fontSize: '1.5em',
-          fontWeight: 'bold'
+          fontWeight: 'bold',
+          marginBottom: '10px'
         }}
       >
         <span>SLP Tracker</span>
