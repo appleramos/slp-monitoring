@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Input, Form, Button, message, Modal, } from 'antd'
+import { Input, Form, message, Modal, } from 'antd'
 import { filter } from 'lodash'
 
 const UserInput = ({ onSubmit, onCancel, visible }) => {
