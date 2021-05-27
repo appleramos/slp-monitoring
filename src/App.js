@@ -10,7 +10,6 @@ import { Table, Popconfirm, Button, message, } from 'antd'
 import { DeleteOutlined, QuestionCircleOutlined, } from '@ant-design/icons';
 
 import UserInput from './components/UserInput'
-import DataRow from './components/DataRow';
 
 function App() {
   const storagePlayers = JSON.parse(window.localStorage.getItem('players')) || { value: [] }
@@ -118,7 +117,7 @@ function App() {
       // fixed: 'left',
     },
     {
-      title: 'Claimable SLP',
+      title: 'Claimed SLP',
       dataIndex: 'address',
       key: 'address',
       width: 50,
