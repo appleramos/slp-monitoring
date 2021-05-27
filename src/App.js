@@ -1,7 +1,7 @@
 import './App.css';
 import 'antd/dist/antd.css'
 import React, { useState, useEffect, } from 'react'
-import { filter } from 'lodash'
+import { filter, cloneDeep, } from 'lodash'
 import axios from 'axios'
 import numeral from 'numeral'
 import moment from 'moment'
@@ -20,7 +20,7 @@ function App() {
 
   useEffect(() => {
     async function fetchData(player) {
-      const res = await axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`);
+      const res = await axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`)
       if (res.data) {
         console.log(playersData)
         let newPlayersData = playersData
@@ -168,15 +168,48 @@ function App() {
     },
   ]
 
-  const handleSubmit = (players) => {
-    setPlayers(players)
+  const handleSubmit = (player) => {
+    const newPlayers = cloneDeep(players)
+    newPlayers.value.push(player)
+    window.localStorage.setItem('players', JSON.stringify(newPlayers))
+    setPlayers(newPlayers)
+    fetchPlayerData(player)
+  }
+
+  const fetchPlayerData = (player) => {
+    setTableLoading(true)
+    axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`)
+      .then(res => {
+        if (res.data) {
+          const {
+            client_id,
+            total,
+            claimable_total,
+            last_claimed_item_at,
+          } = res.data
+          const newPlayersData = cloneDeep(playersData)
+          newPlayersData.push({
+            id: client_id,
+            total: total || 0,
+            claimable: claimable_total || 0,
+            lockedSlp: total - claimable_total,
+            lastClaimedAt: last_claimed_item_at,
+            dailyAvg: getDailyAvg(last_claimed_item_at, total),
+            nextClaimDate: getNextClaimDate(last_claimed_item_at)
+          })
+          setPlayersData(newPlayersData)
+        }
+        setTableLoading(false)
+      })
   }
 
   const deletePlayer = (player) => {
-    const newPlayers = filter(players.value, (p) => p.key !== player.key) //players.value.splice(index, 1)
+    const newPlayers = filter(players.value, (p) => p.key !== player.key) 
+    const newPlayersData = filter(playersData, p => p.id !== player.address)
     setPlayers({value: newPlayers})
+    setPlayersData(newPlayersData)
     window.localStorage.setItem('players', JSON.stringify({value: newPlayers}))
-    message.success(`Successfully deleted ${player.name}`);
+    message.success(`Successfully deleted ${player.name}`)
   }
 
   return (

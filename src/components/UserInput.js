@@ -16,13 +16,11 @@ const UserInput = ({ onSubmit }) => {
       return
     }
 
-    players.value.push({
+    onSubmit({
       key: Date.now(),
       name: values.name || '',
       address: values.address || ''
     })
-    window.localStorage.setItem('players', JSON.stringify(players))
-    onSubmit(players)
     // form.resetFields()
   }
 
