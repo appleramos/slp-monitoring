@@ -7,7 +7,7 @@ import numeral from 'numeral'
 import moment from 'moment'
 
 import { Table, Popconfirm, Button, message, } from 'antd'
-import { DeleteOutlined, QuestionCircleOutlined, RedoOutlined, PlusOutlined, } from '@ant-design/icons';
+import { DeleteOutlined, QuestionCircleOutlined, RedoOutlined, PlusOutlined, } from '@ant-design/icons'
 
 import UserInput from './components/UserInput'
 
@@ -19,8 +19,13 @@ function App() {
   const [ isFormVisible, setIsFormVisible ] = useState(false)
 
   useEffect(() => {
+    loadPlayerData()
+  }, ['players'])
+
+  const loadPlayerData = () => {
+    let newPlayersData = []
+
     async function fetchData(player) {
-      let newPlayersData = playersData
       try {
         const res = await axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`)
         if (res.data) {
@@ -59,7 +64,7 @@ function App() {
     players.value.forEach((player) => {
       fetchData(player)
     })
-  }, ['players'])
+  }
 
   const renderAddress = (text) => {
     const firstDigits = text.substring(0, 6)
@@ -212,6 +217,7 @@ function App() {
         message.error('You entered an invalid etherium address')
         setTableLoading(false)
       })
+      setIsFormVisible(false)
   }
 
   const deletePlayer = (player) => {
@@ -229,6 +235,13 @@ function App() {
 
   const handleCancelForm = () => {
     setIsFormVisible(false)
+  }
+
+  const handleReload = () => {
+    const newPlayersData = []
+    setTableLoading(true)
+    setPlayersData(newPlayersData)
+    loadPlayerData()
   }
 
   return (
@@ -253,6 +266,7 @@ function App() {
           shape="circle" 
           icon={<RedoOutlined />} 
           style={{ marginRight: '20px' }}
+          onClick={ handleReload }
         />
         <Button 
           size="large" 
