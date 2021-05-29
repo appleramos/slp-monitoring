@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import numeral from 'numeral'
 import moment from 'moment'
 import { filter, } from 'lodash'
 
 import { Table, Popconfirm, Button, Typography, } from 'antd'
 import { DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { PlayersContext } from '../contexts/PlayersContext'
 
 const { Paragraph } = Typography
 
-const PlayerMonitoringTable = ({ loading, players, onDelete, playersData, }) => {
+const PlayerMonitoringTable = ({ loading, onDelete, }) => {
+  const {
+		players,
+    playersData,
+	} = useContext(PlayersContext)
 
   const getFromPlayersData = (ethAddress, dataKey, format) => {
     const playerData = filter(playersData, player => player.id.toLowerCase() === ethAddress.toLowerCase())
@@ -124,7 +129,7 @@ const PlayerMonitoringTable = ({ loading, players, onDelete, playersData, }) => 
   return (
     <Table 
       loading={ loading }
-      dataSource={ players }
+      dataSource={ players.value }
       columns={ columns }
       scroll={{ x: 1300 }}
     />
