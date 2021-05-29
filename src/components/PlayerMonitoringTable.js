@@ -3,7 +3,7 @@ import numeral from 'numeral'
 import moment from 'moment'
 import { filter, } from 'lodash'
 
-import { Table, Popconfirm, Button, Typography, } from 'antd'
+import { Table, Popconfirm, Button, Typography, Tag, } from 'antd'
 import { DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { PlayersContext } from '../contexts/PlayersContext'
 
@@ -41,10 +41,23 @@ const PlayerMonitoringTable = ({ loading, onDelete, }) => {
   }
 
   const renderPlayer = (name, player) => {
+    const {
+      type,
+      isko_share
+    } = player
+
+    let playerType = type || 'Manager'
+    let color = playerType === 'Manager' ? 'gold' : 'cyan'
     return (
       <div>
-        <div style={{ fontWeight: 'bold' }}>{ name }</div>
+        <div>
+          <span style={{ fontWeight: 'bold', marginRight: '10px' }}>{ name }</span>
+          <Tag color={ color }>{ playerType }</Tag>
+        </div>
         <div>{ renderAddress(player.address) }</div>
+        { playerType === 'Isko' &&
+          `${isko_share} / ${100 - isko_share}`
+        }
       </div>
     )
   }
