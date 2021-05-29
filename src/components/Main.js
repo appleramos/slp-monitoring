@@ -201,10 +201,7 @@ function Main() {
           />
         </TabPane>
         <TabPane tab="Estimate Earnings" key="2">
-          <EarningsView
-            players={ players.value }
-            playersData={ playersData }
-          />
+          <EarningsView />
         </TabPane>
       </Tabs>
     </div>

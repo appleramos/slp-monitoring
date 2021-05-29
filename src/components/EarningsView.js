@@ -1,13 +1,10 @@
 import React from 'react'
 import PlayerEarningsTable from './PlayerEarningsTable'
 
-const EarningsView = ({ players, playersData }) => {
+const EarningsView = () => {
   return (
     <div>
-      <PlayerEarningsTable 
-        players={ players }
-        playersData={ playersData }
-      />
+      <PlayerEarningsTable />
     </div>
   )
 }
