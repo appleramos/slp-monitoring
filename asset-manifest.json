@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/slp-monitoring/static/css/main.9d5b29c0.chunk.css",
-    "main.js": "/slp-monitoring/static/js/main.6163bda3.chunk.js",
-    "main.js.map": "/slp-monitoring/static/js/main.6163bda3.chunk.js.map",
+    "main.js": "/slp-monitoring/static/js/main.dd89a524.chunk.js",
+    "main.js.map": "/slp-monitoring/static/js/main.dd89a524.chunk.js.map",
     "runtime-main.js": "/slp-monitoring/static/js/runtime-main.b79fec59.js",
     "runtime-main.js.map": "/slp-monitoring/static/js/runtime-main.b79fec59.js.map",
     "static/css/2.c02757eb.chunk.css": "/slp-monitoring/static/css/2.c02757eb.chunk.css",
-    "static/js/2.61cc8106.chunk.js": "/slp-monitoring/static/js/2.61cc8106.chunk.js",
-    "static/js/2.61cc8106.chunk.js.map": "/slp-monitoring/static/js/2.61cc8106.chunk.js.map",
+    "static/js/2.883b7607.chunk.js": "/slp-monitoring/static/js/2.883b7607.chunk.js",
+    "static/js/2.883b7607.chunk.js.map": "/slp-monitoring/static/js/2.883b7607.chunk.js.map",
     "static/js/3.8b451410.chunk.js": "/slp-monitoring/static/js/3.8b451410.chunk.js",
     "static/js/3.8b451410.chunk.js.map": "/slp-monitoring/static/js/3.8b451410.chunk.js.map",
     "index.html": "/slp-monitoring/index.html",
     "static/css/2.c02757eb.chunk.css.map": "/slp-monitoring/static/css/2.c02757eb.chunk.css.map",
     "static/css/main.9d5b29c0.chunk.css.map": "/slp-monitoring/static/css/main.9d5b29c0.chunk.css.map",
-    "static/js/2.61cc8106.chunk.js.LICENSE.txt": "/slp-monitoring/static/js/2.61cc8106.chunk.js.LICENSE.txt"
+    "static/js/2.883b7607.chunk.js.LICENSE.txt": "/slp-monitoring/static/js/2.883b7607.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.b79fec59.js",
     "static/css/2.c02757eb.chunk.css",
-    "static/js/2.61cc8106.chunk.js",
+    "static/js/2.883b7607.chunk.js",
     "static/css/main.9d5b29c0.chunk.css",
-    "static/js/main.6163bda3.chunk.js"
+    "static/js/main.dd89a524.chunk.js"
   ]
 }
