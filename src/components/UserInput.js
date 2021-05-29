@@ -1,25 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { Input, Form, message, Modal, } from 'antd'
+import { Input, Form, message, Modal, Radio, InputNumber, } from 'antd'
 import { filter } from 'lodash'
 
 const UserInput = ({ onSubmit, onCancel, visible }) => {
+  const [ managersShare, setManagersShare ] = useState(40)
+  const [ isIsko, setIsIsko ] = useState(true)
   const [ form ] = Form.useForm()
 
   const onFinish = (values) => {
     let playersString = window.localStorage.getItem('players')
     let players = JSON.parse(playersString) || { value: [] }
-
+    const {
+      name,
+      address,
+      type,
+      isko_share,
+    } = values
     const existingPlayer = filter(players.value, (player) => player.address === values.address)
     if (existingPlayer.length > 0) {
       message.warning('The address you entered is already in the list');
       return
     }
 
+    const scholarsShare = isko_share === '' ? 0 : parseInt(isko_share)
     onSubmit({
       key: Date.now(),
-      name: values.name || '',
-      address: values.address || ''
+      name: name || '',
+      address: address || '',
+      type,
+      isko_share: scholarsShare
     })
     form.resetFields()
   }
@@ -32,9 +42,30 @@ const UserInput = ({ onSubmit, onCancel, visible }) => {
     onFinish(form.getFieldsValue())
   }
 
+  const handleFieldsChange = () => {
+    const values = form.getFieldValue()
+    const {
+      isko_share,
+      type
+    } = values
+
+    setIsIsko(type === 'Isko')
+
+    let iskosShare = isko_share === '' ? 0 : parseInt(isko_share)
+    
+    let managersShare = 100 - iskosShare
+    if (iskosShare > 100) {
+      setManagersShare(0)
+      return
+    }
+    setManagersShare(managersShare)
+  }
+
+  // const isIsko = form.getFieldValue('type') === 'isko'
+
   return (
     <Modal
-      title="Add an Isko"
+      title="Add a Player"
       visible={ visible }
       onOk={ handleOk } 
       onCancel={ handleCancel }
@@ -44,6 +75,7 @@ const UserInput = ({ onSubmit, onCancel, visible }) => {
         onFinish={ onFinish }
         name="axie-user-form"
         form={form}
+        onFieldsChange={ handleFieldsChange }
       >
         <Form.Item
           name="name"
@@ -53,10 +85,40 @@ const UserInput = ({ onSubmit, onCancel, visible }) => {
         </Form.Item>
         <Form.Item
           name="address"
-          rules={[{ required: true, message: 'Please input player adrress' }]}
+          rules={[{ required: true, message: 'Please input player address' }]}
         >
           <Input placeholder="Etherium address *"/>
         </Form.Item>
+        <Form.Item 
+          label="Type" 
+          name="type"
+          initialValue="Isko"
+        >
+          <Radio.Group buttonStyle="solid">
+            <Radio.Button value="Isko">Isko</Radio.Button>
+            <Radio.Button value="Manager">Manager</Radio.Button>
+          </Radio.Group>
+        </Form.Item>
+        { isIsko &&
+          <Form.Item
+            label="Isko's share"
+            name="isko_share"
+            rules={[{ required: true, message: 'Please input isko\'s share' }]}
+            initialValue={ 60 }
+            help={ `Manager's share is ${managersShare}%` }
+            rules={[{ required: isIsko, message: 'Isko\'s share is required' }]}
+          >
+            <InputNumber
+              placeholder="Isko's share"
+              min={0}
+              max={100}
+              formatter={value => `${value}%`}
+              parser={value => value.replace('%', '')}
+              disabled={ !isIsko }
+            />
+          </Form.Item>
+
+        }
       </Form>
     </Modal>
   )
