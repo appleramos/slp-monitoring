@@ -1,15 +1,15 @@
 import './App.css';
 import 'antd/dist/antd.css'
 import React, { useState, useEffect, } from 'react'
-import { filter, cloneDeep, } from 'lodash'
+import { cloneDeep, filter, } from 'lodash'
 import axios from 'axios'
-import numeral from 'numeral'
 import moment from 'moment'
 
-import { Table, Popconfirm, Button, message, } from 'antd'
-import { DeleteOutlined, QuestionCircleOutlined, RedoOutlined, PlusOutlined, } from '@ant-design/icons'
+import { Button, message, } from 'antd'
+import { RedoOutlined, PlusOutlined, } from '@ant-design/icons'
 
 import UserInput from './components/UserInput'
+import PlayersTable from './components/PlayersTable';
 
 function App() {
   const storagePlayers = JSON.parse(window.localStorage.getItem('players')) || { value: [] }
@@ -61,37 +61,23 @@ function App() {
         setTableLoading(false)
       }
     }
+
+    if (players.value.length < 1) {
+      setTableLoading(false)
+      return
+    }
     players.value.forEach((player) => {
       fetchData(player)
     })
-  }
-
-  const renderAddress = (text) => {
-    const firstDigits = text.substring(0, 6)
-    const lastDigits = text.substring(text.length - 5, text.length)
-    return `${firstDigits}...${lastDigits}`
-  }
-
-  const renderButton = (_, record) => {
-    return (
-      <Popconfirm 
-        title={ `Are you sure you want to delete ${record.name}?`}
-        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-        onConfirm={ () => deletePlayer(record) }
-      >
-        <Button 
-          type="link" 
-          danger 
-          icon={<DeleteOutlined />} 
-        />
-      </Popconfirm>
-    )
   }
 
   const getDailyAvg = (lastClaimedAt, total) => {
     const lastClaimDate = moment(new Date(lastClaimedAt * 1000))
     const dateNow = moment()
     const dateDiff = dateNow.diff(lastClaimDate, 'days')
+    if (dateDiff < 1) {
+      return total
+    }
 
     return total/dateDiff
   }
@@ -101,88 +87,14 @@ function App() {
     return lastClaimDate.add(14, 'days').format('LLL')
   }
 
-  const getFromPlayersData = (ethAddress, dataKey, format) => {
-    const playerData = filter(playersData, player => player.id === ethAddress)
-    if (playerData.length > 0) {
-      const data = playerData[0][dataKey]
-      switch (format) {
-        case 'number':
-          return numeral(data).format('0,0')
-        case 'date':
-          return moment(new Date(data * 1000)).format('LLL')
-        case 'decimal':
-          return numeral(data).format('0.0')
-        default:
-          return data;
-      }
-    }
-    return '-'
+  const handleDeletePlayer = (player) => {
+    const newPlayers = filter(players.value, (p) => p.key !== player.key) 
+    const newPlayersData = filter(playersData, p => p.id !== player.address)
+    setPlayers({value: newPlayers})
+    setPlayersData(newPlayersData)
+    window.localStorage.setItem('players', JSON.stringify({value: newPlayers}))
+    message.success(`Successfully deleted ${player.name}`)
   }
-
-  const columns = [
-    {
-      title: '',
-      render: renderButton,
-      width: 5,
-      // fixed: 'left',
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      width: 10,
-      // fixed: 'left',
-    },
-    {
-      title: 'Claimed SLP',
-      dataIndex: 'address',
-      key: 'address',
-      width: 50,
-      render: (_, record) => <span>{getFromPlayersData(record.address, 'claimable', 'number')}</span>
-    },
-    {
-      title: 'Locked SLP',
-      dataIndex: 'address',
-      key: 'address',
-      width: 50,
-      render: (_, record) => <span>{getFromPlayersData(record.address, 'lockedSlp', 'number')}</span>
-    },
-    {
-      title: 'Total SLP',
-      dataIndex: 'address',
-      key: 'address',
-      width: 50,
-      render: (_, record) => <span>{getFromPlayersData(record.address, 'total', 'number')}</span>
-    },
-    {
-      title: 'Daily Avg',
-      dataIndex: 'address',
-      key: 'address',
-      width: 50,
-      render: (_, record) => <span>{getFromPlayersData(record.address, 'dailyAvg', 'decimal')}</span>
-    },
-    {
-      title: 'Last Claim Date',
-      dataIndex: 'address',
-      key: 'address',
-      width: 150,
-      render: (_, record) => <span>{getFromPlayersData(record.address, 'lastClaimedAt', 'date')}</span>
-    },
-    {
-      title: 'Next Claim Date',
-      dataIndex: 'address',
-      key: 'address',
-      width: 150,
-      render: (_, record) => <span>{getFromPlayersData(record.address, 'nextClaimDate', 'none')}</span>
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-      width: 50,
-      render: renderAddress
-    },
-  ]
 
   const handleSubmit = (player) => {
     setTableLoading(true)
@@ -218,15 +130,6 @@ function App() {
         setTableLoading(false)
       })
       setIsFormVisible(false)
-  }
-
-  const deletePlayer = (player) => {
-    const newPlayers = filter(players.value, (p) => p.key !== player.key) 
-    const newPlayersData = filter(playersData, p => p.id !== player.address)
-    setPlayers({value: newPlayers})
-    setPlayersData(newPlayersData)
-    window.localStorage.setItem('players', JSON.stringify({value: newPlayers}))
-    message.success(`Successfully deleted ${player.name}`)
   }
 
   const handleOpenForm = () => {
@@ -283,11 +186,11 @@ function App() {
         visible={ isFormVisible }
         onCancel={ handleCancelForm }
       />
-      <Table 
+      <PlayersTable 
         loading={ tableLoading }
-        dataSource={ players.value }
-        columns={ columns }
-        scroll={{ x: 1300 }}
+        players={ players.value }
+        onDelete={ handleDeletePlayer }
+        playersData={ playersData }
       />
     </div>
   );
