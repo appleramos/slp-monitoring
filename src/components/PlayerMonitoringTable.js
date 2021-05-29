@@ -3,10 +3,12 @@ import numeral from 'numeral'
 import moment from 'moment'
 import { filter, } from 'lodash'
 
-import { Table, Popconfirm, Button, } from 'antd'
+import { Table, Popconfirm, Button, Typography, } from 'antd'
 import { DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 
-const PlayersTable = ({ loading, players, onDelete, playersData, }) => {
+const { Paragraph } = Typography
+
+const PlayerMonitoringTable = ({ loading, players, onDelete, playersData, }) => {
 
   const getFromPlayersData = (ethAddress, dataKey, format) => {
     const playerData = filter(playersData, player => player.id.toLowerCase() === ethAddress.toLowerCase())
@@ -29,7 +31,17 @@ const PlayersTable = ({ loading, players, onDelete, playersData, }) => {
   const renderAddress = (text) => {
     const firstDigits = text.substring(0, 6)
     const lastDigits = text.substring(text.length - 5, text.length)
-    return `${firstDigits}...${lastDigits}`
+
+    return <Paragraph copyable={{ text: text.toLowerCase() }}>{ `${firstDigits}...${lastDigits}` }</Paragraph>
+  }
+
+  const renderPlayer = (name, player) => {
+    return (
+      <div>
+        <div style={{ fontWeight: 'bold' }}>{ name }</div>
+        <div>{ renderAddress(player.address) }</div>
+      </div>
+    )
   }
 
   const renderButton = (_, record) => {
@@ -57,14 +69,13 @@ const PlayersTable = ({ loading, players, onDelete, playersData, }) => {
       title: '',
       render: renderButton,
       width: 5,
-      // fixed: 'left',
     },
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
       width: 10,
-      // fixed: 'left',
+      render: renderPlayer
     },
     {
       title: 'Claimed SLP',
@@ -108,13 +119,6 @@ const PlayersTable = ({ loading, players, onDelete, playersData, }) => {
       width: 150,
       render: (_, record) => <span>{getFromPlayersData(record.address, 'nextClaimDate', 'none')}</span>
     },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-      width: 50,
-      render: renderAddress
-    },
   ]
 
   return (
@@ -127,4 +131,4 @@ const PlayersTable = ({ loading, players, onDelete, playersData, }) => {
   )
 }
 
-export default PlayersTable
+export default PlayerMonitoringTable
