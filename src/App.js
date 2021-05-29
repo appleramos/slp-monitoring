@@ -5,11 +5,13 @@ import { cloneDeep, filter, } from 'lodash'
 import axios from 'axios'
 import moment from 'moment'
 
-import { Button, message, } from 'antd'
+import { Button, message, Tabs, } from 'antd'
 import { RedoOutlined, PlusOutlined, } from '@ant-design/icons'
 
 import UserInput from './components/UserInput'
-import PlayersTable from './components/PlayersTable';
+import PlayerMonitoringTable from './components/PlayerMonitoringTable'
+
+const { TabPane } = Tabs
 
 function App() {
   const storagePlayers = JSON.parse(window.localStorage.getItem('players')) || { value: [] }
@@ -186,12 +188,19 @@ function App() {
         visible={ isFormVisible }
         onCancel={ handleCancelForm }
       />
-      <PlayersTable 
-        loading={ tableLoading }
-        players={ players.value }
-        onDelete={ handleDeletePlayer }
-        playersData={ playersData }
-      />
+      <Tabs defaultActiveKey="1">
+        <TabPane tab="Monitoring" key="1">
+          <PlayerMonitoringTable 
+            loading={ tableLoading }
+            players={ players.value }
+            onDelete={ handleDeletePlayer }
+            playersData={ playersData }
+          />
+        </TabPane>
+        <TabPane tab="Estimate Earnings" key="2">
+          <div>Test</div>
+        </TabPane>
+      </Tabs>
     </div>
   );
 }
