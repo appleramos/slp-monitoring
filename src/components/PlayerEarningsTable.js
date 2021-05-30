@@ -11,6 +11,7 @@ const PlayerEarningsTable = () => {
   const {
 		players,
     playersData,
+    slpRatePeso,
 	} = useContext(PlayersContext)
 
   const renderAddress = (text) => {
@@ -65,7 +66,7 @@ const PlayerEarningsTable = () => {
     const iskosSharePercent = get(player, 'isko_share', 0)
     let iskoShare = 0
     if (iskosSharePercent !== 0) {
-      iskoShare = playerData.total * ( iskosSharePercent/100 )
+      iskoShare = (playerData.total * ( iskosSharePercent/100 )) * slpRatePeso
     }
     return numeral(iskoShare).format('0,0.00')
   }
@@ -76,7 +77,7 @@ const PlayerEarningsTable = () => {
     const managersSharePrecent = 100 - iskosSharePercent
     let managersShare = 0
     if (iskosSharePercent !== 0) {
-      managersShare = playerData.total * ( managersSharePrecent/100 )
+      managersShare = (playerData.total * ( managersSharePrecent/100 )) * slpRatePeso
     }
     return numeral(managersShare).format('0,0.00')
   }
@@ -97,14 +98,14 @@ const PlayerEarningsTable = () => {
       render: (_, record) => <span>{getFromPlayersData(record.address, 'total', 'number')}</span>
     },
     {
-      title: 'Isko\'s Share (SLP)',
+      title: 'Isko\'s Share (Peso)',
       dataIndex: 'name',
       key: 'name',
       width: 10,
       render: (_, record) => <span>{getIskoShare(record)}</span>
     },
     {
-      title: 'Manager\'s Share (SLP)',
+      title: 'Manager\'s Share (Peso)',
       dataIndex: 'name',
       key: 'name',
       width: 10,
