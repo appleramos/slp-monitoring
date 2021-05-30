@@ -70,7 +70,7 @@ const PlayerEarningsTable = () => {
         if (iskosSharePercent !== 0) {
           iskoShare = (playerData.total * ( iskosSharePercent/100 )) * slpRatePeso
         }
-        return numeral(iskoShare).format('0,0.00')
+        return `PHP ${numeral(iskoShare).format('0,0.00')}`
       }
     }
     return '-'
@@ -86,7 +86,7 @@ const PlayerEarningsTable = () => {
         if (iskosSharePercent !== 0) {
           managersShare = (playerData.total * ( managersSharePrecent/100 )) * slpRatePeso
         }
-        return numeral(managersShare).format('0,0.00')
+        return `PHP ${numeral(managersShare).format('0,0.00')}`
         
       }
     }
@@ -109,14 +109,14 @@ const PlayerEarningsTable = () => {
       render: (_, record) => <span>{getFromPlayersData(record.address, 'total', 'number')}</span>
     },
     {
-      title: 'Isko\'s Share (Peso)',
+      title: 'Isko\'s Share',
       dataIndex: 'name',
       key: 'name',
       width: 10,
       render: (_, record) => <span>{getIskoShare(record)}</span>
     },
     {
-      title: 'Manager\'s Share (Peso)',
+      title: 'Manager\'s Share',
       dataIndex: 'name',
       key: 'name',
       width: 10,
