@@ -82,7 +82,7 @@ const PlayerEarningsTable = () => {
       if (playerData && player) {
         const iskosSharePercent = get(player, 'isko_share', 0)
         const managersSharePrecent = 100 - iskosSharePercent
-        let managersShare = 0
+        let managersShare = playerData.total * slpRatePeso
         if (iskosSharePercent !== 0) {
           managersShare = (playerData.total * ( managersSharePrecent/100 )) * slpRatePeso
         }
