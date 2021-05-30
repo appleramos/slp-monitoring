@@ -1,7 +1,7 @@
 import React, { useContext, } from 'react'
 import moment from 'moment'
 import numeral from 'numeral'
-import { filter, } from 'lodash'
+import { filter, get, } from 'lodash'
 
 import { Table, Typography, Tag, } from 'antd'
 import { PlayersContext } from '../contexts/PlayersContext'
@@ -60,6 +60,27 @@ const PlayerEarningsTable = () => {
     return '-'
   }
 
+  const getIskoShare = (player) => {
+    const playerData = filter(playersData, p => p.id.toLowerCase() === player.address.toLowerCase())[0]
+    const iskosSharePercent = get(player, 'isko_share', 0)
+    let iskoShare = 0
+    if (iskosSharePercent !== 0) {
+      iskoShare = playerData.total * ( iskosSharePercent/100 )
+    }
+    return numeral(iskoShare).format('0,0.00')
+  }
+
+  const getManagerShare = (player) => {
+    const playerData = filter(playersData, p => p.id.toLowerCase() === player.address.toLowerCase())[0]
+    const iskosSharePercent = get(player, 'isko_share', 0)
+    const managersSharePrecent = 100 - iskosSharePercent
+    let managersShare = 0
+    if (iskosSharePercent !== 0) {
+      managersShare = playerData.total * ( managersSharePrecent/100 )
+    }
+    return numeral(managersShare).format('0,0.00')
+  }
+
   const columns = [
     {
       title: 'Name',
@@ -75,11 +96,25 @@ const PlayerEarningsTable = () => {
       width: 10,
       render: (_, record) => <span>{getFromPlayersData(record.address, 'total', 'number')}</span>
     },
+    {
+      title: 'Isko\'s Share (SLP)',
+      dataIndex: 'name',
+      key: 'name',
+      width: 10,
+      render: (_, record) => <span>{getIskoShare(record)}</span>
+    },
+    {
+      title: 'Manager\'s Share (SLP)',
+      dataIndex: 'name',
+      key: 'name',
+      width: 10,
+      render: (_, record) => <span>{getManagerShare(record)}</span>
+    },
   ]
 
   return (
     <Table 
-      scroll={{ x: 1300 }}
+      scroll={{ x: 700 }}
       dataSource={ players.value }
       columns={ columns }
     />
