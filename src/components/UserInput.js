@@ -1,11 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, } from 'react'
 
 import { Input, Form, message, Modal, Radio, InputNumber, } from 'antd'
-import { filter } from 'lodash'
+import { filter, get, } from 'lodash'
+import { PlayersContext } from '../contexts/PlayersContext'
 
-const UserInput = ({ onSubmit, onCancel, visible }) => {
-  const [ managersShare, setManagersShare ] = useState(40)
-  const [ isIsko, setIsIsko ] = useState(true)
+const UserInput = ({ onSubmit, onCancel, visible, }) => {
+  const {
+		selectedPlayer,
+	} = useContext(PlayersContext)
+
+  let sShare = parseInt(get(selectedPlayer, 'isko_share', 0))
+
+  const [ managersShare, setManagersShare ] = useState(100 - sShare)
+  const [ isIsko, setIsIsko ] = useState(get(selectedPlayer, 'type', 'Manager') === 'Isko')
   const [ form ] = Form.useForm()
 
   const onFinish = (values) => {
@@ -17,12 +24,15 @@ const UserInput = ({ onSubmit, onCancel, visible }) => {
       type,
       isko_share,
     } = values
-    const existingPlayer = filter(players.value, (player) => player.address === values.address)
-    if (existingPlayer.length > 0) {
-      message.warning('The address you entered is already in the list');
-      return
-    }
 
+    if (!selectedPlayer.name) {
+      const existingPlayer = filter(players.value, (player) => player.address === values.address)
+      if (existingPlayer.length > 0) {
+        message.warning('The address you entered is already in the list');
+        return
+      }
+    }
+  
     const scholarsShare = isko_share === '' ? 0 : parseInt(isko_share)
     onSubmit({
       key: Date.now(),
@@ -52,7 +62,6 @@ const UserInput = ({ onSubmit, onCancel, visible }) => {
     setIsIsko(type === 'Isko')
 
     let iskosShare = isko_share === '' ? 0 : parseInt(isko_share)
-    
     let managersShare = 100 - iskosShare
     if (iskosShare > 100) {
       setManagersShare(0)
@@ -61,11 +70,9 @@ const UserInput = ({ onSubmit, onCancel, visible }) => {
     setManagersShare(managersShare)
   }
 
-  // const isIsko = form.getFieldValue('type') === 'isko'
-
   return (
     <Modal
-      title="Add a Player"
+      title={ selectedPlayer.name ? 'Edit Player' : 'Add a Player'}
       visible={ visible }
       onOk={ handleOk } 
       onCancel={ handleCancel }
@@ -80,19 +87,21 @@ const UserInput = ({ onSubmit, onCancel, visible }) => {
         <Form.Item
           name="name"
           rules={[{ required: true, message: 'Please input player name' }]}
+          initialValue={ selectedPlayer.name }
         >
           <Input placeholder="Name *"/>
         </Form.Item>
         <Form.Item
           name="address"
           rules={[{ required: true, message: 'Please input player address' }]}
+          initialValue={ selectedPlayer.address }
         >
           <Input placeholder="Etherium address *"/>
         </Form.Item>
         <Form.Item 
           label="Type" 
           name="type"
-          initialValue="Isko"
+          initialValue={ get(selectedPlayer, 'type', 'Manager') }
         >
           <Radio.Group buttonStyle="solid">
             <Radio.Button value="Isko">Isko</Radio.Button>
@@ -104,7 +113,7 @@ const UserInput = ({ onSubmit, onCancel, visible }) => {
             label="Isko's share"
             name="isko_share"
             rules={[{ required: true, message: 'Please input isko\'s share' }]}
-            initialValue={ 60 }
+            initialValue={ get(selectedPlayer, 'isko_share', 60) }
             help={ `Manager's share is ${managersShare}%` }
             rules={[{ required: isIsko, message: 'Isko\'s share is required' }]}
           >
@@ -117,7 +126,6 @@ const UserInput = ({ onSubmit, onCancel, visible }) => {
               disabled={ !isIsko }
             />
           </Form.Item>
-
         }
       </Form>
     </Modal>

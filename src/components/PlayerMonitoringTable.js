@@ -4,12 +4,12 @@ import moment from 'moment'
 import { filter, } from 'lodash'
 
 import { Table, Popconfirm, Button, Typography, Tag, } from 'antd'
-import { DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { DeleteOutlined, QuestionCircleOutlined, EditOutlined, } from '@ant-design/icons'
 import { PlayersContext } from '../contexts/PlayersContext'
 
 const { Paragraph } = Typography
 
-const PlayerMonitoringTable = ({ loading, onDelete, }) => {
+const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
   const {
 		players,
     playersData,
@@ -25,7 +25,7 @@ const PlayerMonitoringTable = ({ loading, onDelete, }) => {
         case 'date':
           return moment(new Date(data * 1000)).format('LLL')
         case 'decimal':
-          return numeral(data).format('0.0')
+          return numeral(data).format('0,0.0')
         default:
           return data;
       }
@@ -64,18 +64,29 @@ const PlayerMonitoringTable = ({ loading, onDelete, }) => {
 
   const renderButton = (_, record) => {
     return (
-      <Popconfirm 
-        title={ `Are you sure you want to delete ${record.name}?`}
-        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-        onConfirm={ () => deletePlayer(record) }
-      >
+      <div>
+        <Popconfirm 
+          title={ `Are you sure you want to delete ${record.name}?`}
+          icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+          onConfirm={ () => deletePlayer(record) }
+        >
+          <Button 
+            type="link" 
+            danger 
+            icon={<DeleteOutlined />} 
+          />
+        </Popconfirm>
         <Button 
           type="link" 
-          danger 
-          icon={<DeleteOutlined />} 
+          icon={<EditOutlined />} 
+          onClick={ () => handleEditPlayer(record) }
         />
-      </Popconfirm>
+      </div>
     )
+  }
+
+  const handleEditPlayer = (player) => {
+    onEdit(player)
   }
 
   const deletePlayer = (player) => {

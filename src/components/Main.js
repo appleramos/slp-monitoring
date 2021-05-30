@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, } from 'react'
-import { cloneDeep, filter, } from 'lodash'
+import { cloneDeep, filter, findIndex, remove, } from 'lodash'
 import axios from 'axios'
 import moment from 'moment'
 
@@ -18,7 +18,9 @@ function Main() {
 		players,
     setPlayers,
     playersData,
-    setPlayersData
+    setPlayersData,
+    selectedPlayer,
+    setSelectedPlayer,
 	} = useContext(PlayersContext)
   const [ tableLoading, setTableLoading ] = useState(true)
   const [ isFormVisible, setIsFormVisible ] = useState(false)
@@ -101,12 +103,18 @@ function Main() {
     message.success(`Successfully deleted ${player.name}`)
   }
 
+  const handleEditPlayer = (player) => {
+    setIsFormVisible(true)
+    setSelectedPlayer(player)
+  }
+
   const handleSubmit = (player) => {
     setTableLoading(true)
     const newPlayersData = cloneDeep(playersData)
+    const newPlayers = cloneDeep(players)
+
     axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`)
       .then(res => {
-        const newPlayers = cloneDeep(players)
         if (res.data) {
           const {
             client_id,
@@ -114,7 +122,7 @@ function Main() {
             claimable_total,
             last_claimed_item_at,
           } = res.data
-          newPlayersData.push({
+          const playerData = {
             id: client_id,
             total: total || 0,
             claimable: claimable_total || 0,
@@ -122,11 +130,29 @@ function Main() {
             lastClaimedAt: last_claimed_item_at,
             dailyAvg: getDailyAvg(last_claimed_item_at, total),
             nextClaimDate: getNextClaimDate(last_claimed_item_at)
-          })
+          }
+
+          if (selectedPlayer.name) {
+            let pdIndex = findIndex(newPlayersData, player => {
+              return player.id.toLowerCase() === selectedPlayer.address.toLowerCase()
+            })
+            let pIndex = findIndex(newPlayers.value, player => {
+              return player.address.toLowerCase() === selectedPlayer.address.toLowerCase()
+            })
+            if (pdIndex !== -1 && pIndex !== -1) {
+              // remove(newPlayers.value, player => 
+              //   player.address.toLowerCase() === selectedPlayer.address.toLowerCase()
+              // )
+              newPlayersData.splice(pdIndex, 1, playerData)
+              newPlayers.value.splice(pIndex, 1, player)
+            }
+          } else {
+            newPlayersData.push(playerData)
+            newPlayers.value.push(player)
+          }
         }
         setTableLoading(false)
         setPlayersData(newPlayersData)
-        newPlayers.value.push(player)
         window.localStorage.setItem('players', JSON.stringify(newPlayers))
         setPlayers(newPlayers)
       })
@@ -139,6 +165,7 @@ function Main() {
 
   const handleOpenForm = () => {
     setIsFormVisible(true)
+    setSelectedPlayer({})
   }
 
   const handleCancelForm = () => {
@@ -183,21 +210,23 @@ function Main() {
           icon={<PlusOutlined />} 
           onClick={ handleOpenForm }
         >
-          Isko
+          Player
         </Button>
       </div>
-      <UserInput 
-        onSubmit={ handleSubmit } 
-        visible={ isFormVisible }
-        onCancel={ handleCancelForm }
-      />
+      { isFormVisible &&
+        <UserInput 
+          onSubmit={ handleSubmit } 
+          visible={ true }
+          onCancel={ handleCancelForm }
+          selectedPlayer={ selectedPlayer }
+        />
+      }
       <Tabs defaultActiveKey="1">
         <TabPane tab="Monitoring" key="1">
           <PlayerMonitoringTable 
             loading={ tableLoading }
-            players={ players.value }
             onDelete={ handleDeletePlayer }
-            playersData={ playersData }
+            onEdit={ handleEditPlayer }
           />
         </TabPane>
         <TabPane tab="Estimate Earnings" key="2">
