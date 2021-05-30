@@ -33,12 +33,13 @@ const EarningsSummary = () => {
       const pData = filter(playersData, p => p.id.toLowerCase() === address.toLowerCase())
       if (pData.length > 0) {
         if (type === 'Isko') {
-          const iskoSlpShare = pData[0].total * (isko_share / 100)
-          total += iskoSlpShare * slpRatePeso
+          const managersShare = 100 - isko_share
+          total += pData[0].total * (managersShare / 100) * parseFloat(slpRatePeso)
         } else {
-          total += pData[0].total * slpRatePeso
+          total += pData[0].total * parseFloat(slpRatePeso)
         }
       }
+      
     })
     return `PHP ${numeral(total).format('0,0.00')}`
   }

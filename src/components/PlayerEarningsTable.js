@@ -65,7 +65,7 @@ const PlayerEarningsTable = () => {
     if (playersData) {
       const playerData = filter(playersData, p => p.id.toLowerCase() === player.address.toLowerCase())[0]
       if (playerData && player) {
-        const iskosSharePercent = get(player, 'isko_share', 0)
+        const iskosSharePercent = player.isko_share || 0
         let iskoShare = 0
         if (iskosSharePercent !== 0) {
           iskoShare = (playerData.total * ( iskosSharePercent/100 )) * slpRatePeso
@@ -80,7 +80,7 @@ const PlayerEarningsTable = () => {
     if (playersData) {
       const playerData = filter(playersData, p => p.id.toLowerCase() === player.address.toLowerCase())[0]
       if (playerData && player) {
-        const iskosSharePercent = get(player, 'isko_share', 0)
+        const iskosSharePercent = player.isko_share || 0
         const managersSharePrecent = 100 - iskosSharePercent
         let managersShare = playerData.total * slpRatePeso
         if (iskosSharePercent !== 0) {
