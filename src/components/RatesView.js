@@ -22,7 +22,7 @@ const RatesView = () => {
     <div style={{ marginBottom: '10px' }}>
       <div>
         <div style={{ marginRight: '30px', color: 'gray' }}>SLP Rate in Peso</div>
-        <Title level={3}>
+        <Title level={4}>
           <Paragraph 
             editable={{ onChange: updateSlpRatePeso }}
           >

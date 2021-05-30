@@ -35,7 +35,7 @@ const PlayerEarningsTable = () => {
           <span style={{ fontWeight: 'bold', marginRight: '10px' }}>{ name }</span>
           <Tag color={ color }>{ playerType }</Tag>
         </div>
-        <div>{ renderAddress(player.address) }</div>
+        {/* <div>{ renderAddress(player.address) }</div> */}
         { playerType === 'Isko' &&
           `${isko_share} / ${100 - isko_share}`
         }
