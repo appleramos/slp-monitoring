@@ -3,14 +3,14 @@ import { Card, Typography } from 'antd'
 import numeral from 'numeral'
 import { PlayersContext } from '../contexts/PlayersContext'
 
-const { Paragraph } = Typography
+const { Paragraph, Title, } = Typography
 
 const RatesView = () => {
   const {
 		slpRatePeso,
     setSlpRatePeso,
 	} = useContext(PlayersContext)
-  
+
   const updateSlpRatePeso = (rateText) => {
     if (rateText !== '') {
       setSlpRatePeso(parseFloat(rateText))
@@ -20,9 +20,16 @@ const RatesView = () => {
 
   return (
     <div style={{ marginBottom: '10px' }}>
-      <Card style={{ width: 250 }} title="SLP Rate in Peso">
-        <Paragraph editable={{ onChange: updateSlpRatePeso }}>{ numeral(slpRatePeso).format('0,0.00') }</Paragraph>
-      </Card>
+      <div>
+        <div style={{ marginRight: '30px', color: 'gray' }}>SLP Rate in Peso</div>
+        <Title level={3}>
+          <Paragraph 
+            editable={{ onChange: updateSlpRatePeso }}
+          >
+            { numeral(slpRatePeso).format('0,0.00') }
+          </Paragraph>
+        </Title>
+      </div>
     </div>
   )
 }
