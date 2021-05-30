@@ -52,7 +52,7 @@ const EarningsSummary = () => {
         style={{ marginRight: '20px' }}
       />
       <DataView 
-        title="Ikos' Total Earnings"
+        title="Iskos' Total Earnings"
         value={ getIskosTotalEarnings() }
       />
     </div>
