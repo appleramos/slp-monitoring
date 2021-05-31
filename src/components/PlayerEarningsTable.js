@@ -61,36 +61,51 @@ const PlayerEarningsTable = () => {
     return '-'
   }
 
-  const getIskoShare = (player) => {
+  const getIskoShare = (player, type) => {
+    let shareInPeso = ''
+    let shareInSLP = ''
+    if (player.type === 'Manager') {
+      return '-'
+    }
     if (playersData) {
       const playerData = filter(playersData, p => p.id.toLowerCase() === player.address.toLowerCase())[0]
       if (playerData && player) {
         const iskosSharePercent = player.isko_share || 0
         let iskoShare = 0
         if (iskosSharePercent !== 0) {
-          iskoShare = (playerData.total * ( iskosSharePercent/100 )) * slpRatePeso
+          shareInSLP = (playerData.total * ( iskosSharePercent/100 ))
+          iskoShare = shareInSLP * slpRatePeso
         }
-        return `PHP ${numeral(iskoShare).format('0,0.00')}`
+        shareInPeso = `PHP ${numeral(iskoShare).format('0,0.00')}`
       }
     }
-    return '-'
+    if (type === 'slp') {
+      return numeral(shareInSLP).format('0,0.0')
+    }
+    return shareInPeso
   }
 
-  const getManagerShare = (player) => {
+  const getManagerShare = (player, type) => {
+    let shareInPeso = '-'
+    let shareInSLP = '-'
     if (playersData) {
       const playerData = filter(playersData, p => p.id.toLowerCase() === player.address.toLowerCase())[0]
       if (playerData && player) {
         const iskosSharePercent = player.isko_share || 0
         const managersSharePrecent = 100 - iskosSharePercent
         let managersShare = playerData.total * slpRatePeso
+        shareInSLP = playerData.total
         if (iskosSharePercent !== 0) {
-          managersShare = (playerData.total * ( managersSharePrecent/100 )) * slpRatePeso
+          shareInSLP = (playerData.total * ( managersSharePrecent/100 ))
+          managersShare = shareInSLP * slpRatePeso
         }
-        return `PHP ${numeral(managersShare).format('0,0.00')}`
-        
+        shareInPeso = `PHP ${numeral(managersShare).format('0,0.00')}`
       }
     }
-    return '-'
+    if (type === 'slp') {
+      return numeral(shareInSLP).format('0,0.0')
+    }
+    return shareInPeso
   }
 
   const columns = [
@@ -110,17 +125,41 @@ const PlayerEarningsTable = () => {
     },
     {
       title: 'Isko\'s Share',
-      dataIndex: 'name',
-      key: 'name',
-      width: 10,
-      render: (_, record) => <span>{getIskoShare(record)}</span>
+      children: [
+        {
+          title: 'SLP',
+          dataIndex: 'name',
+          key: 'name',
+          width: 10,
+          render: (_, record) => <span>{getIskoShare(record, 'slp')}</span>
+        },
+        {
+          title: 'Peso',
+          dataIndex: 'name',
+          key: 'name',
+          width: 10,
+          render: (_, record) => <span>{getIskoShare(record, 'peso')}</span>
+        },
+      ]
     },
     {
       title: 'Manager\'s Share',
-      dataIndex: 'name',
-      key: 'name',
-      width: 10,
-      render: (_, record) => <span>{getManagerShare(record)}</span>
+      children: [
+        {
+          title: 'SLP',
+          dataIndex: 'name',
+          key: 'name',
+          width: 10,
+          render: (_, record) => <span>{getManagerShare(record, 'slp')}</span>
+        },
+        {
+          title: 'Peso',
+          dataIndex: 'name',
+          key: 'name',
+          width: 10,
+          render: (_, record) => <span>{getManagerShare(record, 'peso')}</span>
+        },
+      ]
     },
   ]
 
