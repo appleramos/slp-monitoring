@@ -10,8 +10,7 @@ import UserInput from './UserInput'
 import PlayerMonitoringTable from './PlayerMonitoringTable'
 import EarningsView from './EarningsView';
 import { PlayersContext } from '../contexts/PlayersContext'
-import DataView from './DataView'
-import GCash from './gcash.jpg'
+import DonationView from './DonationView'
 
 const { TabPane } = Tabs
 
@@ -185,28 +184,7 @@ function Main() {
     Modal.info({
       title: 'Donation channels',
       content: (
-        <div>
-          <DataView 
-            title="Ronin Address [apple-bit]"
-            value="ronin:786521e1ef005f71b9b454e6e4be48bdc645a3c6"
-            level={ 5 }
-            style={{ marginTop: '20px' }}
-          />
-          <DataView 
-            title="GCash"
-            style={{ marginTop: '20px' }}
-            value={
-              <img src={ GCash } style={{ width: '50%' }}/>
-            }
-            level={ 5 }
-          />
-          <DataView 
-            title="Developer"
-            style={{ marginTop: '20px' }}
-            value="Apple Ramos"
-            small
-          />
-        </div>
+        <DonationView />
       ),
       onOk() {},
     });
