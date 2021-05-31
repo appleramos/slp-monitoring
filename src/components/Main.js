@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useContext, } from 'react'
-import { cloneDeep, filter, findIndex, remove, } from 'lodash'
+import { cloneDeep, filter, findIndex, } from 'lodash'
 import axios from 'axios'
 import moment from 'moment'
 
-import { Button, message, Tabs, } from 'antd'
+import { Button, message, Tabs, Modal, } from 'antd'
 import { RedoOutlined, PlusOutlined, } from '@ant-design/icons'
 
 import UserInput from './UserInput'
 import PlayerMonitoringTable from './PlayerMonitoringTable'
 import EarningsView from './EarningsView';
 import { PlayersContext } from '../contexts/PlayersContext'
+import DataView from './DataView'
+import GCash from './gcash.jpg'
 
 const { TabPane } = Tabs
 
@@ -179,6 +181,37 @@ function Main() {
     loadPlayerData()
   }
 
+  const handleDonate = () => {
+    Modal.info({
+      title: 'Donation channels',
+      content: (
+        <div>
+          <DataView 
+            title="Ronin Address [apple-bit]"
+            value="ronin:786521e1ef005f71b9b454e6e4be48bdc645a3c6"
+            level={ 5 }
+            style={{ marginTop: '20px' }}
+          />
+          <DataView 
+            title="GCash"
+            style={{ marginTop: '20px' }}
+            value={
+              <img src={ GCash } style={{ width: '50%' }}/>
+            }
+            level={ 5 }
+          />
+          <DataView 
+            title="Developer"
+            style={{ marginTop: '20px' }}
+            value="Apple Ramos"
+            small
+          />
+        </div>
+      ),
+      onOk() {},
+    });
+  }
+
   return (
     <div 
       className="SLP_Monitoring_App"
@@ -195,7 +228,15 @@ function Main() {
           display: 'flex'
         }}
       >
-        <div style={{ flexGrow: '3' }}>SLP Tracker</div>
+        <div style={{ flexGrow: '3' }}>
+          <span>SLP Tracker</span>
+          <Button             
+            type="link" 
+            onClick={ handleDonate }
+          >
+            Donate
+          </Button>
+        </div>
         <Button 
           size="large" 
           shape="circle" 

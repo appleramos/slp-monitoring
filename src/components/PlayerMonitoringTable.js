@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { Fragment, useContext } from 'react'
 import numeral from 'numeral'
 import moment from 'moment'
 import { filter, } from 'lodash'
@@ -6,6 +6,7 @@ import { filter, } from 'lodash'
 import { Table, Popconfirm, Button, Typography, Tag, } from 'antd'
 import { DeleteOutlined, QuestionCircleOutlined, EditOutlined, } from '@ant-design/icons'
 import { PlayersContext } from '../contexts/PlayersContext'
+import DataView from './DataView'
 
 const { Paragraph } = Typography
 
@@ -34,30 +35,43 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
   }
 
   const renderAddress = (text) => {
-    const firstDigits = text.substring(0, 6)
+    const firstDigits = text.substring(0, 7)
     const lastDigits = text.substring(text.length - 5, text.length)
 
     return <Paragraph copyable={{ text: text.toLowerCase() }}>{ `${firstDigits}...${lastDigits}` }</Paragraph>
   }
 
   const renderPlayer = (name, player) => {
-    const {
+    let {
       type,
-      isko_share
+      isko_share,
+      account_name,
+      address,
     } = player
 
     let playerType = type || 'Manager'
     let color = playerType === 'Manager' ? 'gold' : 'cyan'
+    if (isNaN(isko_share) || !isko_share) {
+      isko_share = 0
+    }
     return (
       <div>
         <div>
-          <span style={{ fontWeight: 'bold', marginRight: '10px' }}>{ name }</span>
+          <span style={{ fontWeight: 'bold' }}>{ name }</span>
+          { account_name &&
+            <span>&nbsp;|&nbsp;{ account_name }</span>
+          }
+        </div>
+        <div>{ renderAddress(address) }</div>
+        <div>
+          { isko_share !== 0 &&
+            <Fragment>
+              <span>{`${isko_share} / ${100 - isko_share}`}</span>
+              <span style={{ marginRight: '10px' }}></span>
+            </Fragment>
+          }
           <Tag color={ color }>{ playerType }</Tag>
         </div>
-        <div>{ renderAddress(player.address) }</div>
-        { playerType === 'Isko' &&
-          `${isko_share} / ${100 - isko_share}`
-        }
       </div>
     )
   }
@@ -85,6 +99,43 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
     )
   }
 
+  const renderExpandedView = (player) => {
+    const {
+      type,
+      isko_share,
+      account_name,
+      address,
+    } = player
+
+    let playerType = type || 'Manager'
+
+    return (
+      <div style={{ display: 'flex', fontSize: '0.9em' }}>
+        { account_name &&
+          <DataView 
+            title="Acct Name"
+            value={ account_name }
+            small
+            style={{ marginRight: '20px' }}
+          />
+        }
+        <DataView 
+          title="ETH Address"
+          value={ renderAddress(address) }
+          small
+          style={{ marginRight: '20px' }}
+        />
+        { playerType === 'Isko' &&
+          <DataView 
+            title="Isko/Manager"
+            value={`${isko_share} / ${100 - isko_share}`}
+            small
+          />
+        }
+      </div>
+    )
+  }
+
   const handleEditPlayer = (player) => {
     onEdit(player)
   }
@@ -103,7 +154,7 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      width: 10,
+      width: 90,
       render: renderPlayer
     },
     {
@@ -147,7 +198,7 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
       key: 'address',
       width: 150,
       render: (_, record) => <span>{getFromPlayersData(record.address, 'nextClaimDate', 'none')}</span>
-    },
+    }
   ]
 
   return (
@@ -156,6 +207,10 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
       dataSource={ players.value }
       columns={ columns }
       scroll={{ x: 1300 }}
+      // expandable={{
+      //   expandedRowRender: renderExpandedView,
+      //   rowExpandable: record => record.name !== 'No Player Data',
+      // }}
     />
   )
 }

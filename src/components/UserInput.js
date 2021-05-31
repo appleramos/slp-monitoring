@@ -23,6 +23,7 @@ const UserInput = ({ onSubmit, onCancel, visible, }) => {
       address,
       type,
       isko_share,
+      account_name,
     } = values
 
     if (!selectedPlayer.name) {
@@ -39,6 +40,7 @@ const UserInput = ({ onSubmit, onCancel, visible, }) => {
       name: name || '',
       address: address || '',
       type,
+      account_name,
       isko_share: scholarsShare
     })
     form.resetFields()
@@ -86,10 +88,16 @@ const UserInput = ({ onSubmit, onCancel, visible, }) => {
       >
         <Form.Item
           name="name"
-          rules={[{ required: true, message: 'Please input player name' }]}
+          rules={[{ required: true, message: 'Please input nickname' }]}
           initialValue={ selectedPlayer.name }
         >
-          <Input placeholder="Name *"/>
+          <Input placeholder="Nickname *"/>
+        </Form.Item>
+        <Form.Item
+          name="account_name"
+          initialValue={ selectedPlayer.account_name }
+        >
+          <Input placeholder="Account Name (optional)"/>
         </Form.Item>
         <Form.Item
           name="address"
