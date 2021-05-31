@@ -12,7 +12,7 @@ export const  PlayersContextProvider = (props) => {
   const [ playersData, setPlayersData ] = useState([])
 	const [ selectedPlayer, setSelectedPlayer ] = useState({})
   const [ slpRatePeso, setSlpRatePeso ] = useState(slpRatePesoStorage)
-
+  const [ earningsUnit, setEarningsUnit ] = useState('peso')
   
 	return(
 		<PlayersContext.Provider
@@ -25,6 +25,8 @@ export const  PlayersContextProvider = (props) => {
 				setSelectedPlayer,
 				slpRatePeso,
 				setSlpRatePeso,
+				earningsUnit,
+				setEarningsUnit,
 			}}
 		>
 			{props.children}

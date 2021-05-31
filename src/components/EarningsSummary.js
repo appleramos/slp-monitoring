@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { Fragment, useContext } from 'react'
 import { filter } from 'lodash'
 import numeral from 'numeral'
 
@@ -10,6 +10,7 @@ const EarningsSummary = () => {
 		players,
     playersData,
     slpRatePeso,
+    earningsUnit,
 	} = useContext(PlayersContext)
 
   const getIskosTotalEarnings = () => {
@@ -20,10 +21,13 @@ const EarningsSummary = () => {
       const pData = filter(playersData, p => p.id.toLowerCase() === address.toLowerCase())
       if (pData.length > 0) {
         const iskoSlpShare = pData[0].total * (isko_share / 100)
-        total += iskoSlpShare * slpRatePeso
+        total += iskoSlpShare
       }
     })
-    return `PHP ${numeral(total).format('0,0.00')}`
+    if (earningsUnit === 'peso') {
+      return `PHP ${numeral(total * slpRatePeso).format('0,0.00')}`
+    }
+    return numeral(total).format('0,0.0')
   }
 
   const getManagersTotalEarnings = () => {
@@ -34,28 +38,33 @@ const EarningsSummary = () => {
       if (pData.length > 0) {
         if (type === 'Isko') {
           const managersShare = 100 - isko_share
-          total += pData[0].total * (managersShare / 100) * parseFloat(slpRatePeso)
+          total += pData[0].total * (managersShare / 100)
         } else {
-          total += pData[0].total * parseFloat(slpRatePeso)
+          total += pData[0].total
         }
       }
       
     })
-    return `PHP ${numeral(total).format('0,0.00')}`
+    if (earningsUnit === 'peso') {
+      return `PHP ${numeral(total * parseFloat(slpRatePeso)).format('0,0.00')}`
+    }
+    return numeral(total).format('0,0.0')
   }
 
   return (
-    <div style={{ display: 'flex', marginBottom: '15px', flexWrap: 'wrap' }}>
-      <DataView 
-        title="Manager's Total Earnings"
-        value={ getManagersTotalEarnings() }
-        style={{ marginRight: '20px' }}
-      />
-      <DataView 
-        title="Iskos' Total Earnings"
-        value={ getIskosTotalEarnings() }
-      />
-    </div>
+    <Fragment>
+      <div style={{ display: 'flex', marginBottom: '15px', flexWrap: 'wrap' }}>
+        <DataView 
+          title="Manager's Total Earnings"
+          value={ getManagersTotalEarnings() }
+          style={{ marginRight: '20px' }}
+        />
+        <DataView 
+          title="Iskos' Total Earnings"
+          value={ getIskosTotalEarnings() }
+        />
+      </div>
+    </Fragment>
   )
 }
 

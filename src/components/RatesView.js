@@ -1,7 +1,8 @@
-import React, { useState, useContext, } from 'react'
-import { Card, Typography } from 'antd'
+import React, { useContext, } from 'react'
+import { Radio, Typography } from 'antd'
 import numeral from 'numeral'
 import { PlayersContext } from '../contexts/PlayersContext'
+import DataView from './DataView'
 
 const { Paragraph, Title, } = Typography
 
@@ -9,6 +10,8 @@ const RatesView = () => {
   const {
 		slpRatePeso,
     setSlpRatePeso,
+    earningsUnit,
+    setEarningsUnit,
 	} = useContext(PlayersContext)
 
   const updateSlpRatePeso = (rateText) => {
@@ -18,8 +21,17 @@ const RatesView = () => {
     }
   }
 
+  const handleEarningsUnitChange = (e) => {
+     setEarningsUnit(e.target.value)
+  }
+
+  const earningsOptions = [
+    { label: 'Peso', value: 'peso' },
+    { label: 'SLP', value: 'slp' },
+  ]
+
   return (
-    <div style={{ marginBottom: '10px' }}>
+    <div style={{ marginBottom: '10px', display: 'flex' }}>
       <div>
         <div style={{ marginRight: '30px', color: 'gray' }}>SLP Rate in Peso</div>
         <Title level={4}>
@@ -29,6 +41,20 @@ const RatesView = () => {
             { numeral(slpRatePeso).format('0,0.00') }
           </Paragraph>
         </Title>
+      </div>
+      <div>
+        <DataView 
+          title="Earnings Unit"
+          value={
+            <Radio.Group
+              options={ earningsOptions }
+              onChange={ handleEarningsUnitChange }
+              value={ earningsUnit }
+              optionType="button"
+              buttonStyle="solid"
+            />
+          }
+        />
       </div>
     </div>
   )
