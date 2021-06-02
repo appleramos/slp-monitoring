@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, } from 'react'
-import { cloneDeep, filter, findIndex, } from 'lodash'
+import { cloneDeep, filter, findIndex, get, } from 'lodash'
 import axios from 'axios'
 import moment from 'moment'
 
@@ -22,13 +22,36 @@ function Main() {
     setPlayersData,
     selectedPlayer,
     setSelectedPlayer,
+    setSlpRatePeso,
+    slpRatePeso,
+    setSlpRateLoading,
 	} = useContext(PlayersContext)
+  const slpRatePesoStorage = window.localStorage.getItem('slpRatePeso') || 1
   const [ tableLoading, setTableLoading ] = useState(true)
   const [ isFormVisible, setIsFormVisible ] = useState(false)
 
   useEffect(() => {
     loadPlayerData()
+    loadSlpRate()
   }, [])
+
+  const loadSlpRate = () => {
+    setSlpRateLoading(true)
+    async function fetchData() {
+      try {
+        const res = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=smooth-love-potion&vs_currencies=php')
+        if (res.data) {
+          const coingeckoValue = get(res.data, 'smooth-love-potion.php', slpRatePeso)
+          setSlpRatePeso(coingeckoValue)
+        }
+        setSlpRateLoading(false)
+      } catch (err) {
+        setSlpRatePeso(slpRatePesoStorage)
+        setSlpRateLoading(false)
+      }
+    }
+    fetchData()
+  }
 
   const loadPlayerData = () => {
     let newPlayersData = []
@@ -141,9 +164,6 @@ function Main() {
               return player.address.toLowerCase() === selectedPlayer.address.toLowerCase()
             })
             if (pdIndex !== -1 && pIndex !== -1) {
-              // remove(newPlayers.value, player => 
-              //   player.address.toLowerCase() === selectedPlayer.address.toLowerCase()
-              // )
               newPlayersData.splice(pdIndex, 1, playerData)
               newPlayers.value.splice(pIndex, 1, player)
             }
@@ -178,6 +198,7 @@ function Main() {
     setTableLoading(true)
     setPlayersData(newPlayersData)
     loadPlayerData()
+    loadSlpRate()
   }
 
   const handleDonate = () => {

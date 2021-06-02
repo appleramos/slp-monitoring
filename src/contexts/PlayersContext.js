@@ -7,12 +7,12 @@ export const PlayersContext = createContext()
 
 export const  PlayersContextProvider = (props) => {
   const storagePlayers = JSON.parse(window.localStorage.getItem('players')) || { value: [] }
-	const slpRatePesoStorage = window.localStorage.getItem('slpRatePeso') || 1
   const [ players, setPlayers ] = useState(storagePlayers)
   const [ playersData, setPlayersData ] = useState([])
 	const [ selectedPlayer, setSelectedPlayer ] = useState({})
-  const [ slpRatePeso, setSlpRatePeso ] = useState(slpRatePesoStorage)
+  const [ slpRatePeso, setSlpRatePeso ] = useState()
   const [ earningsUnit, setEarningsUnit ] = useState('peso')
+	const [ slpRateLoading, setSlpRateLoading ] = useState(false)
   
 	return(
 		<PlayersContext.Provider
@@ -27,6 +27,8 @@ export const  PlayersContextProvider = (props) => {
 				setSlpRatePeso,
 				earningsUnit,
 				setEarningsUnit,
+				slpRateLoading,
+				setSlpRateLoading,
 			}}
 		>
 			{props.children}
