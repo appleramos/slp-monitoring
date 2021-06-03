@@ -6,7 +6,6 @@ import { filter, } from 'lodash'
 import { Table, Popconfirm, Button, Typography, Tag, } from 'antd'
 import { DeleteOutlined, QuestionCircleOutlined, EditOutlined, } from '@ant-design/icons'
 import { PlayersContext } from '../contexts/PlayersContext'
-import DataView from './DataView'
 
 const { Paragraph } = Typography
 
@@ -95,43 +94,6 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
           icon={<EditOutlined />} 
           onClick={ () => handleEditPlayer(record) }
         />
-      </div>
-    )
-  }
-
-  const renderExpandedView = (player) => {
-    const {
-      type,
-      isko_share,
-      account_name,
-      address,
-    } = player
-
-    let playerType = type || 'Manager'
-
-    return (
-      <div style={{ display: 'flex', fontSize: '0.9em' }}>
-        { account_name &&
-          <DataView 
-            title="Acct Name"
-            value={ account_name }
-            small
-            style={{ marginRight: '20px' }}
-          />
-        }
-        <DataView 
-          title="ETH Address"
-          value={ renderAddress(address) }
-          small
-          style={{ marginRight: '20px' }}
-        />
-        { playerType === 'Isko' &&
-          <DataView 
-            title="Isko/Manager"
-            value={`${isko_share} / ${100 - isko_share}`}
-            small
-          />
-        }
       </div>
     )
   }

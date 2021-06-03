@@ -1,25 +1,17 @@
 import React, { useContext, } from 'react'
 import moment from 'moment'
 import numeral from 'numeral'
-import { filter, get, } from 'lodash'
+import { filter, } from 'lodash'
 
-import { Table, Typography, Tag, } from 'antd'
+import { Table, Tag, } from 'antd'
 import { PlayersContext } from '../contexts/PlayersContext'
 
-const { Paragraph } = Typography
 const PlayerEarningsTable = () => {
   const {
 		players,
     playersData,
     slpRatePeso,
 	} = useContext(PlayersContext)
-
-  const renderAddress = (text) => {
-    const firstDigits = text.substring(0, 6)
-    const lastDigits = text.substring(text.length - 5, text.length)
-
-    return <Paragraph copyable={{ text: text.toLowerCase() }}>{ `${firstDigits}...${lastDigits}` }</Paragraph>
-  }
 
   const renderPlayer = (name, player) => {
     const {

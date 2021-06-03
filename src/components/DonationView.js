@@ -14,7 +14,7 @@ const DonationView = () => {
         title="GCash"
         style={{ marginTop: '20px' }}
         value={
-          <img src={ GCash } style={{ width: '50%' }}/>
+          <img alt="GCash QR" src={ GCash } style={{ width: '50%' }}/>
         }
         level={ 5 }
       />

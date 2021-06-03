@@ -3,7 +3,7 @@ import { Typography } from 'antd'
 
 const { Title } = Typography
 
-export default DataView = ({ value, title, style = {}, level = 4, small }) => {
+const DataView = ({ value, title, style = {}, level = 4, small }) => {
   return (
     <div style={{...style}}>
       <div style={{ marginRight: '30px', color: 'gray' }}>{ title }</div>
@@ -18,3 +18,4 @@ export default DataView = ({ value, title, style = {}, level = 4, small }) => {
     </div>
   )
 }
+export default DataView

@@ -120,7 +120,6 @@ const UserInput = ({ onSubmit, onCancel, visible, }) => {
           <Form.Item
             label="Isko's share"
             name="isko_share"
-            rules={[{ required: true, message: 'Please input isko\'s share' }]}
             initialValue={ get(selectedPlayer, 'isko_share', 60) }
             help={ `Manager's share is ${managersShare}%` }
             rules={[{ required: isIsko, message: 'Isko\'s share is required' }]}

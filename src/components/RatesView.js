@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState, } from 'react'
+import React, { useContext, } from 'react'
 import numeral from 'numeral'
 
-import { Radio, Typography, Skeleton, Button, } from 'antd'
+import { Radio, Typography, Skeleton, } from 'antd'
 
 import { PlayersContext } from '../contexts/PlayersContext'
 import DataView from './DataView'
