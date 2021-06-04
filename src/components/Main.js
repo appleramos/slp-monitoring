@@ -33,7 +33,7 @@ function Main() {
   useEffect(() => {
     loadPlayerData()
     loadSlpRate()
-  })
+  }, [])
 
   const loadSlpRate = () => {
     setSlpRateLoading(true)
