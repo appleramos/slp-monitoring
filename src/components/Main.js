@@ -275,6 +275,9 @@ function Main() {
           <EarningsView />
         </TabPane>
       </Tabs>
+      <div style={{ color: 'gray' }}>
+        © 2021 Apple Ramos
+      </div>
     </div>
   )
 }
