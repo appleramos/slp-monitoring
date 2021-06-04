@@ -66,13 +66,14 @@ function Main() {
             claimable_total,
             last_claimed_item_at,
           } = res.data
+          const locked = total - claimable_total
           newPlayersData.push({
             id: client_id,
             total: total || 0,
             claimable: claimable_total || 0,
-            lockedSlp: total - claimable_total,
+            lockedSlp: locked,
             lastClaimedAt: last_claimed_item_at,
-            dailyAvg: getDailyAvg(last_claimed_item_at, total),
+            dailyAvg: getDailyAvg(last_claimed_item_at, locked),
             nextClaimDate: getNextClaimDate(last_claimed_item_at)
           })
         }
@@ -146,13 +147,14 @@ function Main() {
             claimable_total,
             last_claimed_item_at,
           } = res.data
+          const locked = total - claimable_total
           const playerData = {
             id: client_id,
             total: total || 0,
             claimable: claimable_total || 0,
-            lockedSlp: total - claimable_total,
+            lockedSlp: locked,
             lastClaimedAt: last_claimed_item_at,
-            dailyAvg: getDailyAvg(last_claimed_item_at, total),
+            dailyAvg: getDailyAvg(last_claimed_item_at, locked),
             nextClaimDate: getNextClaimDate(last_claimed_item_at)
           }
 
