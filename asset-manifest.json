@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/static/css/main.9d5b29c0.chunk.css",
-    "main.js": "/static/js/main.3db4684c.chunk.js",
-    "main.js.map": "/static/js/main.3db4684c.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.3c5b04dc.js",
-    "runtime-main.js.map": "/static/js/runtime-main.3c5b04dc.js.map",
-    "static/css/2.c02757eb.chunk.css": "/static/css/2.c02757eb.chunk.css",
-    "static/js/2.ce1277b1.chunk.js": "/static/js/2.ce1277b1.chunk.js",
-    "static/js/2.ce1277b1.chunk.js.map": "/static/js/2.ce1277b1.chunk.js.map",
-    "static/js/3.32bee7f9.chunk.js": "/static/js/3.32bee7f9.chunk.js",
-    "static/js/3.32bee7f9.chunk.js.map": "/static/js/3.32bee7f9.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/2.c02757eb.chunk.css.map": "/static/css/2.c02757eb.chunk.css.map",
-    "static/css/main.9d5b29c0.chunk.css.map": "/static/css/main.9d5b29c0.chunk.css.map",
-    "static/js/2.ce1277b1.chunk.js.LICENSE.txt": "/static/js/2.ce1277b1.chunk.js.LICENSE.txt",
-    "static/media/gcash.d3dcbc45.jpg": "/static/media/gcash.d3dcbc45.jpg"
+    "main.css": "/slp-monitoring/static/css/main.9d5b29c0.chunk.css",
+    "main.js": "/slp-monitoring/static/js/main.3db4684c.chunk.js",
+    "main.js.map": "/slp-monitoring/static/js/main.3db4684c.chunk.js.map",
+    "runtime-main.js": "/slp-monitoring/static/js/runtime-main.5aaa6811.js",
+    "runtime-main.js.map": "/slp-monitoring/static/js/runtime-main.5aaa6811.js.map",
+    "static/css/2.c02757eb.chunk.css": "/slp-monitoring/static/css/2.c02757eb.chunk.css",
+    "static/js/2.a05ed812.chunk.js": "/slp-monitoring/static/js/2.a05ed812.chunk.js",
+    "static/js/2.a05ed812.chunk.js.map": "/slp-monitoring/static/js/2.a05ed812.chunk.js.map",
+    "static/js/3.32bee7f9.chunk.js": "/slp-monitoring/static/js/3.32bee7f9.chunk.js",
+    "static/js/3.32bee7f9.chunk.js.map": "/slp-monitoring/static/js/3.32bee7f9.chunk.js.map",
+    "index.html": "/slp-monitoring/index.html",
+    "static/css/2.c02757eb.chunk.css.map": "/slp-monitoring/static/css/2.c02757eb.chunk.css.map",
+    "static/css/main.9d5b29c0.chunk.css.map": "/slp-monitoring/static/css/main.9d5b29c0.chunk.css.map",
+    "static/js/2.a05ed812.chunk.js.LICENSE.txt": "/slp-monitoring/static/js/2.a05ed812.chunk.js.LICENSE.txt",
+    "static/media/gcash.d3dcbc45.jpg": "/slp-monitoring/static/media/gcash.d3dcbc45.jpg"
   },
   "entrypoints": [
-    "static/js/runtime-main.3c5b04dc.js",
+    "static/js/runtime-main.5aaa6811.js",
     "static/css/2.c02757eb.chunk.css",
-    "static/js/2.ce1277b1.chunk.js",
+    "static/js/2.a05ed812.chunk.js",
     "static/css/main.9d5b29c0.chunk.css",
     "static/js/main.3db4684c.chunk.js"
   ]
