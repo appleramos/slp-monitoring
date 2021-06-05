@@ -14,7 +14,7 @@ function App() {
         <Switch>
           <Route
             exact
-            path="/slp-monitoring"
+            path="/monitoring"
             component={ Main }
           />
           <Redirect to="/slp-monitoring"/>
