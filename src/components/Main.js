@@ -234,42 +234,51 @@ function Main() {
   const readFile = async file => {
     let playersFromFile = file.url
     if (!playersFromFile) {
-      let reader = new FileReader()
-
-      reader.readAsText(file.originFileObj)
-
-      reader.onload = function() {
-        console.log(reader.result)
-      }
-
-      reader.onerror = function() {
-        console.log(reader.error)
-      }
-      // playersFromFile = await new Promise(resolve => {
-      //   const reader = new FileReader()
-      //   reader.readAsText(file.originFileObj)
-      //   reader.onload = () => {
-      //     return resolve(JSON.parse(reader.result))
-      //   }
-      // })
+      playersFromFile = await new Promise(resolve => {
+        const reader = new FileReader()
+        reader.readAsText(file.originFileObj)
+        reader.onload = () => {
+          return resolve(JSON.parse(reader.result))
+        }
+      })
     }
-    // setPlayers(playersFromFile)
-    // window.localStorage.setItem('players', JSON.stringify(playersFromFile))
-    // setTableLoading(true)
-    // loadPlayerData(playersFromFile)
+    setPlayers(playersFromFile)
+    window.localStorage.setItem('players', JSON.stringify(playersFromFile))
+    setTableLoading(true)
+    loadPlayerData(playersFromFile)
   }
 
-  const handleUpload = (info) => {
-    if (get(info, 'file.status') === 'done') {
-      readFile(info.file)
+  const handleUpload = (file) => {
+    var reader = new FileReader()
+    reader.readAsText(file)
+    reader.onload = () => {
+      const playersFromFile = JSON.parse(reader.result)
+      setPlayers(playersFromFile)
+      window.localStorage.setItem('players', JSON.stringify(playersFromFile))
+      setTableLoading(true)
+      loadPlayerData(playersFromFile)
     }
   }
+
+//   fileUpload(file) {
+    // var reader = new FileReader()
+    // reader.readAsDataURL(file)
+    // reader.onload = () => {
+    //     this.setState({
+    //         img: reader.result,
+    //     })
+    // }
+// }
 
   const handleBeforeUpload = (file) => {
     if (file.type !== 'application/json') {
       message.error(`${file.name} is not a JSON file`);
     }
     return file.type === 'application/json' ? true : Upload.LIST_IGNORE;
+  }
+
+  const handleUploadReq = () => {
+
   }
 
   return (
@@ -356,8 +365,9 @@ function Main() {
           </Popconfirm>
           <Upload 
             name="players_json"
+            accept=".json"
             maxCount={1}
-            onChange={ handleUpload }
+            action={ handleUpload }
             beforeUpload={ handleBeforeUpload }
             showUploadList={ false }
           >
