@@ -2,9 +2,16 @@ import React, { useState, useEffect, useContext, } from 'react'
 import { cloneDeep, filter, findIndex, get, } from 'lodash'
 import axios from 'axios'
 import moment from 'moment'
+import fs, { read } from 'fs'
 
-import { Button, message, Tabs, Modal, Popconfirm, } from 'antd'
-import { RedoOutlined, PlusOutlined, CloudDownloadOutlined, QuestionCircleOutlined, } from '@ant-design/icons'
+import { Button, message, Tabs, Modal, Popconfirm, Upload, } from 'antd'
+import { 
+  RedoOutlined, 
+  PlusOutlined, 
+  CloudDownloadOutlined, 
+  QuestionCircleOutlined, 
+  UploadOutlined,
+} from '@ant-design/icons'
 
 import UserInput from './UserInput'
 import PlayerMonitoringTable from './PlayerMonitoringTable'
@@ -53,8 +60,9 @@ function Main() {
     fetchData()
   }
 
-  const loadPlayerData = () => {
+  const loadPlayerData = (plyrs) => {
     let newPlayersData = []
+    let myPlayers = plyrs || players
 
     async function fetchData(player) {
       try {
@@ -89,16 +97,16 @@ function Main() {
         })
       }
       setPlayersData(newPlayersData)
-      if (newPlayersData.length === players.value.length) {
+      if (newPlayersData.length === myPlayers.value.length) {
         setTableLoading(false)
       }
     }
 
-    if (players.value.length < 1) {
+    if (myPlayers.value.length < 1) {
       setTableLoading(false)
       return
     }
-    players.value.forEach((player) => {
+    myPlayers.value.forEach((player) => {
       fetchData(player)
     })
   }
@@ -223,6 +231,36 @@ function Main() {
     downloadAnchorNode.remove()
   }
 
+  const readFile = async file => {
+    let playersFromFile = file.url
+    if (!playersFromFile) {
+      playersFromFile = await new Promise(resolve => {
+        const reader = new FileReader()
+        reader.readAsText(file.originFileObj)
+        reader.onload = () => {
+          return resolve(JSON.parse(reader.result))
+        }
+      })
+    }
+    setPlayers(playersFromFile)
+    window.localStorage.setItem('players', JSON.stringify(playersFromFile))
+    setTableLoading(true)
+    loadPlayerData(playersFromFile)
+  }
+
+  const handleUpload = (info) => {
+    if (get(info, 'file.status') === 'done') {
+      readFile(info.file)
+    }
+  }
+
+  const handleBeforeUpload = (file) => {
+    if (file.type !== 'application/json') {
+      message.error(`${file.name} is not a JSON file`);
+    }
+    return file.type === 'application/json' ? true : Upload.LIST_IGNORE;
+  }
+
   return (
     <div 
       className="SLP_Monitoring_App"
@@ -241,32 +279,17 @@ function Main() {
       >
         <div style={{ flexGrow: '3' }}>
           <span>SLP Tracker</span>
-          <Button             
-            type="link" 
-            onClick={ handleDonate }
-          >
-            Donate
-          </Button>
         </div>
         <div style={{ textAlign: 'right' }}>
           <Button 
+            size="large"
             shape="circle" 
             icon={<RedoOutlined />} 
             style={{ marginRight: '10px', marginBottom: '5px' }}
             onClick={ handleReload }
           />
-          <Popconfirm 
-            title="This will export a JSON file of your data"
-            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-            onConfirm={ handleDownload }
-          >
-            <Button 
-              shape="circle" 
-              style={{ marginRight: '10px' }}
-              icon={<CloudDownloadOutlined />} 
-            />
-          </Popconfirm>
           <Button 
+            size="large"
             type="primary" 
             shape="round" 
             icon={<PlusOutlined />} 
@@ -296,8 +319,45 @@ function Main() {
           <EarningsView />
         </TabPane>
       </Tabs>
-      <div style={{ color: 'gray' }}>
-        © 2021 Apple Ramos
+      <div style={{ display: 'flex' }}>
+        <div style={{ flexGrow: 3 }}>
+          <span style={{ color: 'gray' }}>© 2021 Apple Ramos&nbsp;&nbsp;&nbsp;|</span>
+          <Button             
+            type="link" 
+            onClick={ handleDonate }
+          >
+            Donate
+          </Button>
+        </div>
+        <div>
+          <Popconfirm 
+            title="This will export a JSON file of your data"
+            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+            onConfirm={ handleDownload }
+          >
+            <Button 
+              shape="round" 
+              style={{ marginRight: '10px' }}
+              icon={<CloudDownloadOutlined />} 
+            >
+              Export
+            </Button>
+          </Popconfirm>
+          <Upload 
+            name="players_json"
+            maxCount={1}
+            onChange={ handleUpload }
+            beforeUpload={ handleBeforeUpload }
+            showUploadList={ false }
+          >
+            <Button 
+              shape="round" 
+              icon={<UploadOutlined />}
+            >
+              Import (JSON)
+            </Button>
+          </Upload>
+        </div>
       </div>
     </div>
   )
