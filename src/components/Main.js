@@ -234,18 +234,29 @@ function Main() {
   const readFile = async file => {
     let playersFromFile = file.url
     if (!playersFromFile) {
-      playersFromFile = await new Promise(resolve => {
-        const reader = new FileReader()
-        reader.readAsText(file.originFileObj)
-        reader.onload = () => {
-          return resolve(JSON.parse(reader.result))
-        }
-      })
+      let reader = new FileReader()
+
+      reader.readAsText(file.originFileObj)
+
+      reader.onload = function() {
+        console.log(reader.result)
+      }
+
+      reader.onerror = function() {
+        console.log(reader.error)
+      }
+      // playersFromFile = await new Promise(resolve => {
+      //   const reader = new FileReader()
+      //   reader.readAsText(file.originFileObj)
+      //   reader.onload = () => {
+      //     return resolve(JSON.parse(reader.result))
+      //   }
+      // })
     }
-    setPlayers(playersFromFile)
-    window.localStorage.setItem('players', JSON.stringify(playersFromFile))
-    setTableLoading(true)
-    loadPlayerData(playersFromFile)
+    // setPlayers(playersFromFile)
+    // window.localStorage.setItem('players', JSON.stringify(playersFromFile))
+    // setTableLoading(true)
+    // loadPlayerData(playersFromFile)
   }
 
   const handleUpload = (info) => {
