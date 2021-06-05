@@ -3,8 +3,8 @@ import { cloneDeep, filter, findIndex, get, } from 'lodash'
 import axios from 'axios'
 import moment from 'moment'
 
-import { Button, message, Tabs, Modal, } from 'antd'
-import { RedoOutlined, PlusOutlined, } from '@ant-design/icons'
+import { Button, message, Tabs, Modal, Popconfirm, } from 'antd'
+import { RedoOutlined, PlusOutlined, CloudDownloadOutlined, QuestionCircleOutlined, } from '@ant-design/icons'
 
 import UserInput from './UserInput'
 import PlayerMonitoringTable from './PlayerMonitoringTable'
@@ -213,6 +213,16 @@ function Main() {
     });
   }
 
+  const handleDownload = () => {
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(players))
+    var downloadAnchorNode = document.createElement('a')
+    downloadAnchorNode.setAttribute("href",     dataStr)
+    downloadAnchorNode.setAttribute("download", `monitoring_players_${Date.now()}.json`)
+    document.body.appendChild(downloadAnchorNode) // required for firefox
+    downloadAnchorNode.click()
+    downloadAnchorNode.remove()
+  }
+
   return (
     <div 
       className="SLP_Monitoring_App"
@@ -238,22 +248,33 @@ function Main() {
             Donate
           </Button>
         </div>
-        <Button 
-          size="large" 
-          shape="circle" 
-          icon={<RedoOutlined />} 
-          style={{ marginRight: '20px' }}
-          onClick={ handleReload }
-        />
-        <Button 
-          size="large" 
-          type="primary" 
-          shape="round" 
-          icon={<PlusOutlined />} 
-          onClick={ handleOpenForm }
-        >
-          Player
-        </Button>
+        <div style={{ textAlign: 'right' }}>
+          <Button 
+            shape="circle" 
+            icon={<RedoOutlined />} 
+            style={{ marginRight: '10px', marginBottom: '5px' }}
+            onClick={ handleReload }
+          />
+          <Popconfirm 
+            title="This will export a JSON file of your data"
+            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+            onConfirm={ handleDownload }
+          >
+            <Button 
+              shape="circle" 
+              style={{ marginRight: '10px' }}
+              icon={<CloudDownloadOutlined />} 
+            />
+          </Popconfirm>
+          <Button 
+            type="primary" 
+            shape="round" 
+            icon={<PlusOutlined />} 
+            onClick={ handleOpenForm }
+          >
+            Player
+          </Button>
+        </div>
       </div>
       { isFormVisible &&
         <UserInput 
