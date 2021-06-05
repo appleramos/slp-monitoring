@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext, } from 'react'
 import { cloneDeep, filter, findIndex, get, } from 'lodash'
 import axios from 'axios'
 import moment from 'moment'
-import fs, { read } from 'fs'
 
 import { Button, message, Tabs, Modal, Popconfirm, Upload, } from 'antd'
 import { 
@@ -260,25 +259,11 @@ function Main() {
     }
   }
 
-//   fileUpload(file) {
-    // var reader = new FileReader()
-    // reader.readAsDataURL(file)
-    // reader.onload = () => {
-    //     this.setState({
-    //         img: reader.result,
-    //     })
-    // }
-// }
-
   const handleBeforeUpload = (file) => {
     if (file.type !== 'application/json') {
       message.error(`${file.name} is not a JSON file`);
     }
     return file.type === 'application/json' ? true : Upload.LIST_IGNORE;
-  }
-
-  const handleUploadReq = () => {
-
   }
 
   return (
