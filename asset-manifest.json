@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/slp-monitoring/static/css/main.9d5b29c0.chunk.css",
-    "main.js": "/slp-monitoring/static/js/main.c6b5cadc.chunk.js",
-    "main.js.map": "/slp-monitoring/static/js/main.c6b5cadc.chunk.js.map",
+    "main.js": "/slp-monitoring/static/js/main.82c4828d.chunk.js",
+    "main.js.map": "/slp-monitoring/static/js/main.82c4828d.chunk.js.map",
     "runtime-main.js": "/slp-monitoring/static/js/runtime-main.0b17f989.js",
     "runtime-main.js.map": "/slp-monitoring/static/js/runtime-main.0b17f989.js.map",
     "static/css/2.c02757eb.chunk.css": "/slp-monitoring/static/css/2.c02757eb.chunk.css",
@@ -21,6 +21,6 @@
     "static/css/2.c02757eb.chunk.css",
     "static/js/2.9dedc105.chunk.js",
     "static/css/main.9d5b29c0.chunk.css",
-    "static/js/main.c6b5cadc.chunk.js"
+    "static/js/main.82c4828d.chunk.js"
   ]
 }
