@@ -11,14 +11,15 @@ function App() {
   return (
     <Router>
       <PlayersContextProvider>
-          <Switch>
+        <Main />
+          {/* <Switch>
 						<Route
 							exact
 							path="/slp-monitoring"
 							component={ Main }
 						/>
 						<Redirect to="/slp-monitoring"/>
-					</Switch>
+					</Switch> */}
       </PlayersContextProvider>
     </Router>
   )
