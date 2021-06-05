@@ -17,7 +17,7 @@ function App() {
             path="/monitoring"
             component={ Main }
           />
-          <Redirect to="/slp-monitoring"/>
+          <Redirect to="/monitoring"/>
         </Switch>
       </PlayersContextProvider>
     </Router>
