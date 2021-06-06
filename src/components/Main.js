@@ -3,21 +3,17 @@ import { cloneDeep, filter, findIndex, get, } from 'lodash'
 import axios from 'axios'
 import moment from 'moment'
 
-import { Button, message, Tabs, Modal, Popconfirm, Upload, } from 'antd'
+import { Button, message, Tabs, Upload, } from 'antd'
 import { 
   RedoOutlined, 
   PlusOutlined, 
-  CloudDownloadOutlined, 
-  QuestionCircleOutlined, 
-  UploadOutlined,
-  FacebookOutlined,
 } from '@ant-design/icons'
 
+import { PlayersContext } from '../contexts/PlayersContext'
 import UserInput from './UserInput'
 import PlayerMonitoringTable from './PlayerMonitoringTable'
 import EarningsView from './EarningsView';
-import { PlayersContext } from '../contexts/PlayersContext'
-import DonationView from './DonationView'
+import Footer from './Footer'
 
 const { TabPane } = Tabs
 
@@ -212,16 +208,6 @@ function Main() {
     loadSlpRate()
   }
 
-  const handleDonate = () => {
-    Modal.info({
-      title: 'Donation channels',
-      content: (
-        <DonationView />
-      ),
-      onOk() {},
-    });
-  }
-
   const handleDownload = () => {
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(players))
     var downloadAnchorNode = document.createElement('a')
@@ -326,66 +312,11 @@ function Main() {
           <EarningsView />
         </TabPane>
       </Tabs>
-      <div style={{ 
-        display: 'flex',
-        position: 'fixed',
-        bottom: 0,
-        backgroundColor: 'white',
-        width: '100%',
-        left: 0,
-        padding: '11px 15px', 
-      }}>
-        <div style={{ flexGrow: 3 }}>
-          <span style={{ color: 'gray' }}>© 2021 Apple Ramos&nbsp;&nbsp;&nbsp;|</span>
-          <Button             
-            type="link" 
-            onClick={ handleDonate }
-          >
-            Donate
-          </Button>
-          <Button 
-            size="small"
-            shape="round" 
-            icon={<FacebookOutlined />} 
-            href="https://www.facebook.com/titoPiccolow"
-            target="_blank"
-          >
-            Follow
-          </Button>
-        </div>
-        <div style={{ textAlign: 'right' }}>
-          <Popconfirm 
-            title="This will export a JSON file of your data"
-            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-            onConfirm={ handleDownload }
-          >
-            <Button 
-              size="small"
-              shape="round" 
-              style={{ marginRight: '10px', marginBottom: '5px' }}
-              icon={<CloudDownloadOutlined />} 
-            >
-              Export
-            </Button>
-          </Popconfirm>
-          <Upload 
-            name="players_json"
-            accept=".json"
-            maxCount={1}
-            action={ handleUpload }
-            beforeUpload={ handleBeforeUpload }
-            showUploadList={ false }
-          >
-            <Button 
-              size="small"
-              shape="round" 
-              icon={<UploadOutlined />}
-            >
-              Import (JSON)
-            </Button>
-          </Upload>
-        </div>
-      </div>
+      <Footer 
+        onBeforeUpload={ handleBeforeUpload }
+        onUpload={ handleUpload }
+        onDownload={ handleDownload }
+      />
     </div>
   )
 }
