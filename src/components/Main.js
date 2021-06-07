@@ -83,7 +83,7 @@ function Main() {
           })
         }
       } catch (err) {
-        if (retryCount !== 2) {
+        if (retryCount !== 8) {
           retryCount += 1
           fetchData(player, retryCount)
         } else {
