@@ -60,7 +60,8 @@ function Main() {
     let newPlayersData = []
     let myPlayers = plyrs || players
 
-    async function fetchData(player) {
+    async function fetchData(player, retry) {
+      let retryCount = retry !== undefined ? retry : 0
       try {
         const res = await axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`)
         if (res.data) {
@@ -82,16 +83,20 @@ function Main() {
           })
         }
       } catch (err) {
-        // newPlayersData.push({
-        //   id: `invalid-user-${player.address}`,
-        //   total: 0,
-        //   claimable: 0,
-        //   lockedSlp: 0,
-        //   lastClaimedAt: moment(),
-        //   dailyAvg: 0,
-        //   nextClaimDate: moment()
-        // })
-        fetchData(player)
+        if (retryCount !== 2) {
+          retryCount += 1
+          fetchData(player, retryCount)
+        } else {
+          newPlayersData.push({
+            id: `invalid-user-${player.address}`,
+            total: 0,
+            claimable: 0,
+            lockedSlp: 0,
+            lastClaimedAt: moment(),
+            dailyAvg: 0,
+            nextClaimDate: moment()
+          })
+        }
       }
       setPlayersData(newPlayersData)
       if (newPlayersData.length === myPlayers.value.length) {
