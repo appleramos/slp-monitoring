@@ -86,16 +86,16 @@ function Main() {
           })
         }
       } catch (err) {
-        // newPlayersData.push({
-        //   id: `invalid-user-${player.address}`,
-        //   total: 0,
-        //   claimable: 0,
-        //   lockedSlp: 0,
-        //   lastClaimedAt: moment(),
-        //   dailyAvg: 0,
-        //   nextClaimDate: moment()
-        // })
-        fetchData(player)
+        newPlayersData.push({
+          id: `invalid-user-${player.address}`,
+          total: 0,
+          claimable: 0,
+          lockedSlp: 0,
+          lastClaimedAt: moment(),
+          dailyAvg: 0,
+          nextClaimDate: moment()
+        })
+        // fetchData(player)
       }
       setPlayersData(newPlayersData)
       if (newPlayersData.length === myPlayers.value.length) {
