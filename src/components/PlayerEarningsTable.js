@@ -106,7 +106,8 @@ const PlayerEarningsTable = () => {
       dataIndex: 'name',
       key: 'name',
       width: 10,
-      render: renderPlayer
+      render: renderPlayer,
+      sorter: (a, b) => a.name.localeCompare(b.name)
     },
     {
       title: 'SLP Earned',

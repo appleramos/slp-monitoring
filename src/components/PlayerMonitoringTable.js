@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react'
+import React, { Fragment, useContext, useState, } from 'react'
 import numeral from 'numeral'
 import moment from 'moment'
 import { filter, } from 'lodash'
@@ -117,7 +117,8 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
       dataIndex: 'name',
       key: 'name',
       width: 90,
-      render: renderPlayer
+      render: renderPlayer,
+      sorter: (a, b) => a.name.localeCompare(b.name)
     },
     {
       title: 'Claimed SLP',
@@ -169,10 +170,6 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
       dataSource={ players.value }
       columns={ columns }
       scroll={{ x: 1300 }}
-      // expandable={{
-      //   expandedRowRender: renderExpandedView,
-      //   rowExpandable: record => record.name !== 'No Player Data',
-      // }}
     />
   )
 }
