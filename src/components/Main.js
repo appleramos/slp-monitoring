@@ -81,7 +81,7 @@ function Main() {
             total: total || 0,
             claimable: claimable_total || 0,
             lockedSlp: locked,
-            lastClaimedAt: getNextClaimDate(last_claimed_item_at),
+            lastClaimedAt: getLastClaimDate(last_claimed_item_at),
             dailyAvg: getDailyAvg(last_claimed_item_at, locked),
             nextClaimDate: getNextClaimDate(last_claimed_item_at)
           })
@@ -135,6 +135,10 @@ function Main() {
     return lastClaimDate.add(14, 'days').format('LLL')
   }
 
+  const getLastClaimDate = (date) => {
+    return moment(new Date(date * 1000)).format('LLL')
+  }
+
   const handleDeletePlayer = (player) => {
     const newPlayers = filter(players.value, (p) => p.key !== player.key) 
     const newPlayersData = filter(playersData, p => p.id !== player.address)
@@ -171,7 +175,7 @@ function Main() {
             total: total || 0,
             claimable: claimable_total || 0,
             lockedSlp: locked,
-            lastClaimedAt: getNextClaimDate(last_claimed_item_at),
+            lastClaimedAt: getLastClaimDate(last_claimed_item_at),
             dailyAvg: getDailyAvg(last_claimed_item_at, locked),
             nextClaimDate: getNextClaimDate(last_claimed_item_at)
           }
