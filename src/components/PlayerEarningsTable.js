@@ -3,8 +3,9 @@ import moment from 'moment'
 import numeral from 'numeral'
 import { filter, } from 'lodash'
 
-import { Table, Tag, } from 'antd'
+import { Table, Tag, Tooltip, } from 'antd'
 import { PlayersContext } from '../contexts/PlayersContext'
+import SlpIcon from './slp-icon.png'
 
 const PlayerEarningsTable = () => {
   const {
@@ -21,13 +22,22 @@ const PlayerEarningsTable = () => {
 
     let playerType = type || 'Manager'
     let color = playerType === 'Manager' ? 'gold' : 'cyan'
+
+    let nextClaimDateData = getFromPlayersData(player.address, 'nextClaimDate')
+    let nextClaimDate = moment(nextClaimDateData)
+    let isClaimable = moment().isSameOrAfter(nextClaimDate)
+
     return (
       <div>
         <div>
           <span style={{ fontWeight: 'bold', marginRight: '10px' }}>{ name }</span>
           <Tag color={ color }>{ playerType }</Tag>
+          { isClaimable &&
+            <Tooltip title="Claimable!">
+              <img alt="SLP Icon" src={ SlpIcon } style={{ width: '17px' }}/>
+            </Tooltip>
+          }
         </div>
-        {/* <div>{ renderAddress(player.address) }</div> */}
         { playerType === 'Isko' &&
           `${isko_share} / ${100 - isko_share}`
         }

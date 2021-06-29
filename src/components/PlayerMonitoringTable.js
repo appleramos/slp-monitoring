@@ -1,11 +1,12 @@
-import React, { Fragment, useContext, useState, } from 'react'
+import React, { Fragment, useContext, } from 'react'
 import numeral from 'numeral'
 import moment from 'moment'
 import { filter, } from 'lodash'
 
-import { Table, Popconfirm, Button, Typography, Tag, } from 'antd'
+import { Table, Popconfirm, Button, Typography, Tag, Tooltip, } from 'antd'
 import { DeleteOutlined, QuestionCircleOutlined, EditOutlined, } from '@ant-design/icons'
 import { PlayersContext } from '../contexts/PlayersContext'
+import SlpIcon from './slp-icon.png'
 
 const { Paragraph } = Typography
 
@@ -53,6 +54,11 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
     if (isNaN(isko_share) || !isko_share) {
       isko_share = 0
     }
+
+    let nextClaimDateData = getFromPlayersData(player.address, 'nextClaimDate')
+    let nextClaimDate = moment(nextClaimDateData)
+    let isClaimable = moment().isSameOrAfter(nextClaimDate)
+
     return (
       <div>
         <div>
@@ -70,6 +76,11 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
             </Fragment>
           }
           <Tag color={ color }>{ playerType }</Tag>
+          { isClaimable &&
+            <Tooltip title="Claimable!">
+              <img alt="SLP Icon" src={ SlpIcon } style={{ width: '17px' }}/>
+            </Tooltip>
+          }
         </div>
       </div>
     )
