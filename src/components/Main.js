@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext, } from 'react'
 import { cloneDeep, filter, findIndex, get, } from 'lodash'
 import axios from 'axios'
 import moment from 'moment'
+import numeral from 'numeral'
+import ObjectsToCsv from 'node-create-csv'
 
 import { Button, message, Tabs, Upload, } from 'antd'
 import { 
@@ -74,10 +76,12 @@ function Main() {
           const locked = total - claimable_total
           newPlayersData.push({
             id: client_id,
+            nickname: player.name,
+            accountName: player.account_name,
             total: total || 0,
             claimable: claimable_total || 0,
             lockedSlp: locked,
-            lastClaimedAt: last_claimed_item_at,
+            lastClaimedAt: getNextClaimDate(last_claimed_item_at),
             dailyAvg: getDailyAvg(last_claimed_item_at, locked),
             nextClaimDate: getNextClaimDate(last_claimed_item_at)
           })
@@ -89,12 +93,14 @@ function Main() {
         } else {
           newPlayersData.push({
             id: `invalid-user-${player.address}`,
+            nickname: player.name,
+            accountName: player.account_name,
             total: 0,
             claimable: 0,
             lockedSlp: 0,
-            lastClaimedAt: moment(),
+            lastClaimedAt: moment().format('LLL'),
             dailyAvg: 0,
-            nextClaimDate: moment()
+            nextClaimDate: moment().format('LLL')
           })
         }
       }
@@ -121,7 +127,7 @@ function Main() {
       return total
     }
 
-    return total/dateDiff
+    return numeral(total/dateDiff).format('0,0.00')
   }
 
   const getNextClaimDate = (lastClaimedAt) => {
@@ -160,10 +166,12 @@ function Main() {
           const locked = total - claimable_total
           const playerData = {
             id: client_id,
+            nickname: player.name,
+            accountName: player.account_name,
             total: total || 0,
             claimable: claimable_total || 0,
             lockedSlp: locked,
-            lastClaimedAt: last_claimed_item_at,
+            lastClaimedAt: getNextClaimDate(last_claimed_item_at),
             dailyAvg: getDailyAvg(last_claimed_item_at, locked),
             nextClaimDate: getNextClaimDate(last_claimed_item_at)
           }
@@ -223,23 +231,6 @@ function Main() {
     downloadAnchorNode.remove()
   }
 
-  const readFile = async file => {
-    let playersFromFile = file.url
-    if (!playersFromFile) {
-      playersFromFile = await new Promise(resolve => {
-        const reader = new FileReader()
-        reader.readAsText(file.originFileObj)
-        reader.onload = () => {
-          return resolve(JSON.parse(reader.result))
-        }
-      })
-    }
-    setPlayers(playersFromFile)
-    window.localStorage.setItem('players', JSON.stringify(playersFromFile))
-    setTableLoading(true)
-    loadPlayerData(playersFromFile)
-  }
-
   const handleUpload = (file) => {
     var reader = new FileReader()
     reader.readAsText(file)
@@ -250,6 +241,21 @@ function Main() {
       setTableLoading(true)
       loadPlayerData(playersFromFile)
     }
+  }
+
+  const handleDownloadToCsv = () => {
+    (async () => {
+      const csv = new ObjectsToCsv(playersData)
+      const csvString = await csv.toString()
+      const encodedUri = encodeURI(`data:text/csv;charset=utf-8, + ${csvString}`)
+      var link = document.createElement("a")
+      link.setAttribute("href", encodedUri)
+      link.setAttribute("download", `monitoring_players_${Date.now()}.csv`)
+      document.body.appendChild(link)
+      
+      link.click()
+      link.remove()
+    })()
   }
 
   const handleBeforeUpload = (file) => {
@@ -321,6 +327,7 @@ function Main() {
         onBeforeUpload={ handleBeforeUpload }
         onUpload={ handleUpload }
         onDownload={ handleDownload }
+        onDownloadCsv={ handleDownloadToCsv }
       />
     </div>
   )

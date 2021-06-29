@@ -8,7 +8,7 @@ import {
 import { Button, Popconfirm, Upload, Modal, } from 'antd'
 import DonationView from './DonationView'
 
-const Footer = ({ onUpload, onBeforeUpload, onDownload, }) => {
+const Footer = ({ onUpload, onBeforeUpload, onDownload, onDownloadCsv, }) => {
   const handleDonate = () => {
     Modal.info({
       title: 'Donation channels',
@@ -49,6 +49,20 @@ const Footer = ({ onUpload, onBeforeUpload, onDownload, }) => {
       </div>
       <div style={{ textAlign: 'right' }}>
         <Popconfirm 
+          title="This will export a CSV file of your data"
+          icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+          onConfirm={ onDownloadCsv }
+        >
+          <Button 
+            size="small"
+            shape="round" 
+            style={{ marginRight: '10px', marginBottom: '5px' }}
+            icon={<CloudDownloadOutlined />} 
+          >
+            .csv
+          </Button>
+        </Popconfirm>
+        <Popconfirm 
           title="This will export a JSON file of your data"
           icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
           onConfirm={ onDownload }
@@ -59,7 +73,7 @@ const Footer = ({ onUpload, onBeforeUpload, onDownload, }) => {
             style={{ marginRight: '10px', marginBottom: '5px' }}
             icon={<CloudDownloadOutlined />} 
           >
-            Export
+            .json
           </Button>
         </Popconfirm>
         <Upload 

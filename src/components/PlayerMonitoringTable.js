@@ -164,7 +164,7 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
       dataIndex: 'address',
       key: 'address',
       width: 150,
-      render: (_, record) => <span>{getFromPlayersData(record.address, 'lastClaimedAt', 'date')}</span>
+      render: (_, record) => <span>{getFromPlayersData(record.address, 'lastClaimedAt', 'none')}</span>
     },
     {
       title: 'Next Claim Date',
