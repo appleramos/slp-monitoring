@@ -24,6 +24,9 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
         case 'number':
           return numeral(data).format('0,0')
         case 'date':
+          if (data === 0) {
+            return '-'
+          }
           return moment(new Date(data * 1000)).format('LLL')
         case 'decimal':
           return numeral(data).format('0,0.0')

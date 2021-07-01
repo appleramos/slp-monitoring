@@ -131,11 +131,17 @@ function Main() {
   }
 
   const getNextClaimDate = (lastClaimedAt) => {
+    if (lastClaimedAt === 0) {
+      return '-'
+    }
     const lastClaimDate = moment(new Date(lastClaimedAt * 1000))
     return lastClaimDate.add(14, 'days').format('LLL')
   }
 
   const getLastClaimDate = (date) => {
+    if (date === 0) {
+      return '-'
+    }
     return moment(new Date(date * 1000)).format('LLL')
   }
 
