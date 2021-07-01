@@ -35,10 +35,11 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
   }
 
   const renderAddress = (text) => {
-    const firstDigits = text.substring(0, 7)
-    const lastDigits = text.substring(text.length - 5, text.length)
+    const address = text.replace('0x', 'ronin:')
+    const firstDigits = address.substring(0, 11)
+    const lastDigits = address.substring(address.length - 5, address.length)
 
-    return <Paragraph copyable={{ text: text.toLowerCase() }}>{ `${firstDigits}...${lastDigits}` }</Paragraph>
+    return <Paragraph copyable={{ text: address.toLowerCase() }}>{ `${firstDigits}...${lastDigits}` }</Paragraph>
   }
 
   const renderPlayer = (name, player) => {

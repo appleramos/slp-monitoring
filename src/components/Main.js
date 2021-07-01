@@ -157,6 +157,7 @@ function Main() {
     setTableLoading(true)
     const newPlayersData = cloneDeep(playersData)
     const newPlayers = cloneDeep(players)
+    player.address = player.address.replace('ronin:', '0x')
 
     axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`)
       .then(res => {
