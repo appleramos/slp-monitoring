@@ -3,7 +3,6 @@ import {
   CloudDownloadOutlined, 
   QuestionCircleOutlined, 
   UploadOutlined,
-  FacebookOutlined,
 } from '@ant-design/icons'
 import { Button, Popconfirm, Upload, Modal, } from 'antd'
 import DonationView from './DonationView'
@@ -36,15 +35,6 @@ const Footer = ({ onUpload, onBeforeUpload, onDownload, onDownloadCsv, }) => {
           onClick={ handleDonate }
         >
           Donate
-        </Button>
-        <Button 
-          size="small"
-          shape="round" 
-          icon={<FacebookOutlined />} 
-          href="https://www.facebook.com/titoPiccolow"
-          target="_blank"
-        >
-          Follow
         </Button>
       </div>
       <div style={{ textAlign: 'right' }}>
