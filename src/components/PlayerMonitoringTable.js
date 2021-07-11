@@ -1,11 +1,12 @@
-import React, { Fragment, useContext } from 'react'
+import React, { Fragment, useContext, } from 'react'
 import numeral from 'numeral'
 import moment from 'moment'
 import { filter, } from 'lodash'
 
-import { Table, Popconfirm, Button, Typography, Tag, } from 'antd'
+import { Table, Popconfirm, Button, Typography, Tag, Tooltip, } from 'antd'
 import { DeleteOutlined, QuestionCircleOutlined, EditOutlined, } from '@ant-design/icons'
 import { PlayersContext } from '../contexts/PlayersContext'
+import SlpIcon from './slp-icon.png'
 
 const { Paragraph } = Typography
 
@@ -23,6 +24,9 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
         case 'number':
           return numeral(data).format('0,0')
         case 'date':
+          if (data === 0) {
+            return '-'
+          }
           return moment(new Date(data * 1000)).format('LLL')
         case 'decimal':
           return numeral(data).format('0,0.0')
@@ -34,10 +38,11 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
   }
 
   const renderAddress = (text) => {
-    const firstDigits = text.substring(0, 7)
-    const lastDigits = text.substring(text.length - 5, text.length)
+    const address = text.replace('0x', 'ronin:')
+    const firstDigits = address.substring(0, 11)
+    const lastDigits = address.substring(address.length - 5, address.length)
 
-    return <Paragraph copyable={{ text: text.toLowerCase() }}>{ `${firstDigits}...${lastDigits}` }</Paragraph>
+    return <Paragraph copyable={{ text: address.toLowerCase() }}>{ `${firstDigits}...${lastDigits}` }</Paragraph>
   }
 
   const renderPlayer = (name, player) => {
@@ -53,6 +58,11 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
     if (isNaN(isko_share) || !isko_share) {
       isko_share = 0
     }
+
+    let nextClaimDateData = getFromPlayersData(player.address, 'nextClaimDate')
+    let nextClaimDate = moment(nextClaimDateData)
+    let isClaimable = moment().isSameOrAfter(nextClaimDate)
+
     return (
       <div>
         <div>
@@ -70,6 +80,11 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
             </Fragment>
           }
           <Tag color={ color }>{ playerType }</Tag>
+          { isClaimable &&
+            <Tooltip title="Claimable!">
+              <img alt="SLP Icon" src={ SlpIcon } style={{ width: '17px' }}/>
+            </Tooltip>
+          }
         </div>
       </div>
     )
@@ -117,7 +132,8 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
       dataIndex: 'name',
       key: 'name',
       width: 90,
-      render: renderPlayer
+      render: renderPlayer,
+      sorter: (a, b) => a.name.localeCompare(b.name)
     },
     {
       title: 'Claimed SLP',
@@ -152,7 +168,7 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
       dataIndex: 'address',
       key: 'address',
       width: 150,
-      render: (_, record) => <span>{getFromPlayersData(record.address, 'lastClaimedAt', 'date')}</span>
+      render: (_, record) => <span>{getFromPlayersData(record.address, 'lastClaimedAt', 'none')}</span>
     },
     {
       title: 'Next Claim Date',
@@ -169,10 +185,6 @@ const PlayerMonitoringTable = ({ loading, onDelete, onEdit, }) => {
       dataSource={ players.value }
       columns={ columns }
       scroll={{ x: 1300 }}
-      // expandable={{
-      //   expandedRowRender: renderExpandedView,
-      //   rowExpandable: record => record.name !== 'No Player Data',
-      // }}
     />
   )
 }

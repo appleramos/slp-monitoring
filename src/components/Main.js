@@ -2,15 +2,20 @@ import React, { useState, useEffect, useContext, } from 'react'
 import { cloneDeep, filter, findIndex, get, } from 'lodash'
 import axios from 'axios'
 import moment from 'moment'
+import numeral from 'numeral'
+import ObjectsToCsv from 'node-create-csv'
 
-import { Button, message, Tabs, Modal, } from 'antd'
-import { RedoOutlined, PlusOutlined, } from '@ant-design/icons'
+import { Button, message, Tabs, Upload, } from 'antd'
+import { 
+  RedoOutlined, 
+  PlusOutlined, 
+} from '@ant-design/icons'
 
+import { PlayersContext } from '../contexts/PlayersContext'
 import UserInput from './UserInput'
 import PlayerMonitoringTable from './PlayerMonitoringTable'
 import EarningsView from './EarningsView';
-import { PlayersContext } from '../contexts/PlayersContext'
-import DonationView from './DonationView'
+import Footer from './Footer'
 
 const { TabPane } = Tabs
 
@@ -53,10 +58,12 @@ function Main() {
     fetchData()
   }
 
-  const loadPlayerData = () => {
+  const loadPlayerData = (plyrs) => {
     let newPlayersData = []
+    let myPlayers = plyrs || players
 
-    async function fetchData(player) {
+    async function fetchData(player, retry) {
+      let retryCount = retry !== undefined ? retry : 0
       try {
         const res = await axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`)
         if (res.data) {
@@ -69,36 +76,45 @@ function Main() {
           const locked = total - claimable_total
           newPlayersData.push({
             id: client_id,
+            nickname: player.name,
+            accountName: player.account_name,
             total: total || 0,
             claimable: claimable_total || 0,
             lockedSlp: locked,
-            lastClaimedAt: last_claimed_item_at,
+            lastClaimedAt: getLastClaimDate(last_claimed_item_at),
             dailyAvg: getDailyAvg(last_claimed_item_at, locked),
             nextClaimDate: getNextClaimDate(last_claimed_item_at)
           })
         }
       } catch (err) {
-        newPlayersData.push({
-          id: `invalid-user-${player.address}`,
-          total: 0,
-          claimable: 0,
-          lockedSlp: 0,
-          lastClaimedAt: moment(),
-          dailyAvg: 0,
-          nextClaimDate: moment()
-        })
+        if (retryCount !== 16) {
+          retryCount += 1
+          fetchData(player, retryCount)
+        } else {
+          newPlayersData.push({
+            id: `invalid-user-${player.address}`,
+            nickname: player.name,
+            accountName: player.account_name,
+            total: 0,
+            claimable: 0,
+            lockedSlp: 0,
+            lastClaimedAt: moment().format('LLL'),
+            dailyAvg: 0,
+            nextClaimDate: moment().format('LLL')
+          })
+        }
       }
       setPlayersData(newPlayersData)
-      if (newPlayersData.length === players.value.length) {
+      if (newPlayersData.length === myPlayers.value.length) {
         setTableLoading(false)
       }
     }
 
-    if (players.value.length < 1) {
+    if (myPlayers.value.length < 1) {
       setTableLoading(false)
       return
     }
-    players.value.forEach((player) => {
+    myPlayers.value.forEach((player) => {
       fetchData(player)
     })
   }
@@ -111,12 +127,22 @@ function Main() {
       return total
     }
 
-    return total/dateDiff
+    return numeral(total/dateDiff).format('0,0.00')
   }
 
   const getNextClaimDate = (lastClaimedAt) => {
+    if (lastClaimedAt === 0) {
+      return '-'
+    }
     const lastClaimDate = moment(new Date(lastClaimedAt * 1000))
     return lastClaimDate.add(14, 'days').format('LLL')
+  }
+
+  const getLastClaimDate = (date) => {
+    if (date === 0) {
+      return '-'
+    }
+    return moment(new Date(date * 1000)).format('LLL')
   }
 
   const handleDeletePlayer = (player) => {
@@ -137,6 +163,7 @@ function Main() {
     setTableLoading(true)
     const newPlayersData = cloneDeep(playersData)
     const newPlayers = cloneDeep(players)
+    player.address = player.address.replace('ronin:', '0x')
 
     axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`)
       .then(res => {
@@ -150,10 +177,12 @@ function Main() {
           const locked = total - claimable_total
           const playerData = {
             id: client_id,
+            nickname: player.name,
+            accountName: player.account_name,
             total: total || 0,
             claimable: claimable_total || 0,
             lockedSlp: locked,
-            lastClaimedAt: last_claimed_item_at,
+            lastClaimedAt: getLastClaimDate(last_claimed_item_at),
             dailyAvg: getDailyAvg(last_claimed_item_at, locked),
             nextClaimDate: getNextClaimDate(last_claimed_item_at)
           }
@@ -203,14 +232,48 @@ function Main() {
     loadSlpRate()
   }
 
-  const handleDonate = () => {
-    Modal.info({
-      title: 'Donation channels',
-      content: (
-        <DonationView />
-      ),
-      onOk() {},
-    });
+  const handleDownload = () => {
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(players))
+    var downloadAnchorNode = document.createElement('a')
+    downloadAnchorNode.setAttribute("href",     dataStr)
+    downloadAnchorNode.setAttribute("download", `monitoring_players_${Date.now()}.json`)
+    document.body.appendChild(downloadAnchorNode) // required for firefox
+    downloadAnchorNode.click()
+    downloadAnchorNode.remove()
+  }
+
+  const handleUpload = (file) => {
+    var reader = new FileReader()
+    reader.readAsText(file)
+    reader.onload = () => {
+      const playersFromFile = JSON.parse(reader.result)
+      setPlayers(playersFromFile)
+      window.localStorage.setItem('players', JSON.stringify(playersFromFile))
+      setTableLoading(true)
+      loadPlayerData(playersFromFile)
+    }
+  }
+
+  const handleDownloadToCsv = () => {
+    (async () => {
+      const csv = new ObjectsToCsv(playersData)
+      const csvString = await csv.toString()
+      const encodedUri = encodeURI(`data:text/csv;charset=utf-8, + ${csvString}`)
+      var link = document.createElement("a")
+      link.setAttribute("href", encodedUri)
+      link.setAttribute("download", `monitoring_players_${Date.now()}.csv`)
+      document.body.appendChild(link)
+      
+      link.click()
+      link.remove()
+    })()
+  }
+
+  const handleBeforeUpload = (file) => {
+    if (file.type !== 'application/json') {
+      message.error(`${file.name} is not a JSON file`);
+    }
+    return file.type === 'application/json' ? true : Upload.LIST_IGNORE;
   }
 
   return (
@@ -218,7 +281,7 @@ function Main() {
       className="SLP_Monitoring_App"
       style={{
         padding: '15px 25px',
-        margin: 'auto'
+        margin: 'auto',
       }}
     >
       <div
@@ -231,29 +294,25 @@ function Main() {
       >
         <div style={{ flexGrow: '3' }}>
           <span>SLP Tracker</span>
-          <Button             
-            type="link" 
-            onClick={ handleDonate }
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <Button 
+            size="large"
+            shape="circle" 
+            icon={<RedoOutlined />} 
+            style={{ marginRight: '10px', marginBottom: '5px' }}
+            onClick={ handleReload }
+          />
+          <Button 
+            size="large"
+            type="primary" 
+            shape="round" 
+            icon={<PlusOutlined />} 
+            onClick={ handleOpenForm }
           >
-            Donate
+            Player
           </Button>
         </div>
-        <Button 
-          size="large" 
-          shape="circle" 
-          icon={<RedoOutlined />} 
-          style={{ marginRight: '20px' }}
-          onClick={ handleReload }
-        />
-        <Button 
-          size="large" 
-          type="primary" 
-          shape="round" 
-          icon={<PlusOutlined />} 
-          onClick={ handleOpenForm }
-        >
-          Player
-        </Button>
       </div>
       { isFormVisible &&
         <UserInput 
@@ -263,7 +322,7 @@ function Main() {
           selectedPlayer={ selectedPlayer }
         />
       }
-      <Tabs defaultActiveKey="1">
+      <Tabs defaultActiveKey="1" style={{ paddingBottom: '60px' }}>
         <TabPane tab="Monitoring" key="1">
           <PlayerMonitoringTable 
             loading={ tableLoading }
@@ -275,6 +334,12 @@ function Main() {
           <EarningsView />
         </TabPane>
       </Tabs>
+      <Footer 
+        onBeforeUpload={ handleBeforeUpload }
+        onUpload={ handleUpload }
+        onDownload={ handleDownload }
+        onDownloadCsv={ handleDownloadToCsv }
+      />
     </div>
   )
 }

@@ -104,7 +104,7 @@ const UserInput = ({ onSubmit, onCancel, visible, }) => {
           rules={[{ required: true, message: 'Please input player address' }]}
           initialValue={ selectedPlayer.address }
         >
-          <Input placeholder="Etherium address *"/>
+          <Input placeholder="Ronin address *"/>
         </Form.Item>
         <Form.Item 
           label="Type" 
