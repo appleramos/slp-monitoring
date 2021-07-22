@@ -65,7 +65,7 @@ function Main() {
     async function fetchData(player, retry) {
       let retryCount = retry !== undefined ? retry : 0
       try {
-        const res = await axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`)
+        const res = await axios(`https://game-api.skymavis.com/game-api/clients/${player.address}/items/1`)
         if (res.data) {
           const {
             client_id,
@@ -165,7 +165,7 @@ function Main() {
     const newPlayers = cloneDeep(players)
     player.address = player.address.replace('ronin:', '0x')
 
-    axios(`https://lunacia.skymavis.com/game-api/clients/${player.address}/items/1`)
+    axios(`https://game-api.skymavis.com/game-api/clients/${player.address}/items/1`)
       .then(res => {
         if (res.data) {
           const {
