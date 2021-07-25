@@ -42,7 +42,7 @@ const RatesView = () => {
         { slpRateLoading ?
           <Skeleton.Input style={{ width: 40 }} active={ true } size="small" />
           :
-          <div>
+          <div style={{ display: 'flex' }}>
             <img alt="CoinGecko Icon" src={ CoingeckoIcon } style={{ width: '26px', height: '26px', marginRight: '10px' }}/>
             <h4>PHP</h4>
             <Title level={4}>
