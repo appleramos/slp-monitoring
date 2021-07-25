@@ -3,15 +3,18 @@ import { filter } from 'lodash'
 import numeral from 'numeral'
 
 import { PlayersContext } from '../contexts/PlayersContext'
+import { SettingsContext } from '../contexts/SettingsContext'
 import DataView from './DataView'
 
 const EarningsSummary = () => {
   const {
 		players,
     playersData,
+	} = useContext(PlayersContext)
+  const {
     slpRatePeso,
     earningsUnit,
-	} = useContext(PlayersContext)
+	} = useContext(SettingsContext)
 
   const getIskosTotalEarnings = () => {
     let total = 0
@@ -60,7 +63,7 @@ const EarningsSummary = () => {
           style={{ marginRight: '20px' }}
         />
         <DataView 
-          title="Iskos' Total Earnings"
+          title="Scholar's Total Earnings"
           value={ getIskosTotalEarnings() }
         />
       </div>

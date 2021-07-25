@@ -6,6 +6,7 @@ import { filter, } from 'lodash'
 import { Table, Popconfirm, Button, Typography, Tag, Tooltip, } from 'antd'
 import { DeleteOutlined, QuestionCircleOutlined, EditOutlined, } from '@ant-design/icons'
 import { PlayersContext } from '../contexts/PlayersContext'
+import { SettingsContext } from '../contexts/SettingsContext'
 import SlpIcon from './slp-icon.png'
 
 const { Paragraph } = Typography
@@ -14,8 +15,10 @@ const TrackerTable = ({ loading, onDelete, onEdit, }) => {
   const {
 		players,
     playersData,
-    slpRatePeso,
 	} = useContext(PlayersContext)
+  const {
+    slpRatePeso,
+	} = useContext(SettingsContext)
 
   const getFromPlayersData = (ethAddress, dataKey, format) => {
     const playerData = filter(playersData, player => player.id.toLowerCase() === ethAddress.toLowerCase())
@@ -65,9 +68,7 @@ const TrackerTable = ({ loading, onDelete, onEdit, }) => {
       isko_share = 0
     }
 
-    let nextClaimDateData = getFromPlayersData(player.address, 'nextClaimDate')
-    let nextClaimDate = moment(nextClaimDateData)
-    let isClaimable = moment().isSameOrAfter(nextClaimDate)
+    let isClaimable = getFromPlayersData(player.address, 'isClaimable')
 
     return (
       <div>

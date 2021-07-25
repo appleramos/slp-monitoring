@@ -8,6 +8,7 @@ import ObjectsToCsv from 'node-create-csv'
 import { message, Upload, } from 'antd'
 
 import { PlayersContext } from '../contexts/PlayersContext'
+import { SettingsContext } from '../contexts/SettingsContext'
 import UserInput from './UserInput'
 import Footer from './Footer'
 import Header from './Header'
@@ -22,10 +23,12 @@ function Main() {
     setPlayersData,
     selectedPlayer,
     setSelectedPlayer,
+	} = useContext(PlayersContext)
+  const {
     setSlpRatePeso,
     slpRatePeso,
     setSlpRateLoading,
-	} = useContext(PlayersContext)
+	} = useContext(SettingsContext)
   const slpRatePesoStorage = window.localStorage.getItem('slpRatePeso') || 1
   const [ tableLoading, setTableLoading ] = useState(true)
   const [ isFormVisible, setIsFormVisible ] = useState(false)
@@ -78,7 +81,8 @@ function Main() {
             lockedSlp: locked,
             lastClaimedAt: getLastClaimDate(last_claimed_item_at),
             dailyAvg: getDailyAvg(last_claimed_item_at, locked),
-            nextClaimDate: getNextClaimDate(last_claimed_item_at)
+            nextClaimDate: getNextClaimDate(last_claimed_item_at),
+            isClaimable: moment().isSameOrAfter(getNextClaimDate(last_claimed_item_at)),
           })
         }
       } catch (err) {
@@ -95,7 +99,8 @@ function Main() {
             lockedSlp: 0,
             lastClaimedAt: moment(),
             dailyAvg: 0,
-            nextClaimDate: moment()
+            nextClaimDate: moment(),
+            isClaimable: false,
           })
         }
       }
@@ -179,7 +184,8 @@ function Main() {
             lockedSlp: locked,
             lastClaimedAt: getLastClaimDate(last_claimed_item_at),
             dailyAvg: getDailyAvg(last_claimed_item_at, locked),
-            nextClaimDate: getNextClaimDate(last_claimed_item_at)
+            nextClaimDate: getNextClaimDate(last_claimed_item_at),
+            isClaimable: moment().isSameOrAfter(getNextClaimDate(last_claimed_item_at)),
           }
 
           if (selectedPlayer.name) {
