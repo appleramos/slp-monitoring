@@ -297,18 +297,6 @@ function Main() {
           selectedPlayer={ selectedPlayer }
         />
       }
-      {/* <Tabs defaultActiveKey="1" style={{ paddingBottom: '60px' }}>
-        <TabPane tab="Monitoring" key="1">
-          <PlayerMonitoringTable 
-            loading={ tableLoading }
-            onDelete={ handleDeletePlayer }
-            onEdit={ handleEditPlayer }
-          />
-        </TabPane>
-        <TabPane tab="Estimate Earnings" key="2">
-          <EarningsView />
-        </TabPane>
-      </Tabs> */}
       <Footer 
         onBeforeUpload={ handleBeforeUpload }
         onUpload={ handleUpload }
