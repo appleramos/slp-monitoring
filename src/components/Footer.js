@@ -3,16 +3,79 @@ import {
   CloudDownloadOutlined, 
   QuestionCircleOutlined, 
   UploadOutlined,
+  SettingOutlined,
 } from '@ant-design/icons'
 import { Button, Popconfirm, Upload, Modal, } from 'antd'
-import DonationView from './DonationView'
+// import DonationView from './DonationView'
 
 const Footer = ({ onUpload, onBeforeUpload, onDownload, onDownloadCsv, }) => {
-  const handleDonate = () => {
+  // const handleDonate = () => {
+  //   Modal.info({
+  //     title: 'Donation channels',
+  //     content: (
+  //       <DonationView />
+  //     ),
+  //     onOk() {},
+  //   })
+  // }
+
+  const handleSettings = () => {
     Modal.info({
-      title: 'Donation channels',
+      title: 'Settings',
       content: (
-        <DonationView />
+        <div>
+          <Popconfirm 
+            title="This will export a CSV file of your data"
+            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+            onConfirm={ onDownloadCsv }
+          >
+            <Button 
+              block
+              shape="round" 
+              style={{ marginRight: '10px', marginBottom: '5px' }}
+              icon={<CloudDownloadOutlined />} 
+            >
+              Export to .CSV file
+            </Button>
+          </Popconfirm>
+          <div style={{ display: 'flex' }}>
+            <Popconfirm 
+              title="This will export a JSON file of your data"
+              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+              onConfirm={ onDownload }
+            >
+              <Button 
+                block
+                size="small"
+                shape="round" 
+                style={{ marginRight: '10px', marginBottom: '5px' }}
+                icon={<CloudDownloadOutlined />} 
+              >
+                Export list
+              </Button>
+            </Popconfirm>
+            <div>
+              <Upload 
+                block
+                name="players_json"
+                accept=".json"
+                maxCount={1}
+                action={ onUpload }
+                beforeUpload={ onBeforeUpload }
+                showUploadList={ false }
+              >
+                <Button 
+                  block
+                  shape="round" 
+                  size="small"
+                  icon={<UploadOutlined />}
+                >
+                  Import list
+                </Button>
+              </Upload>
+            </div>
+          </div>
+        </div>
       ),
       onOk() {},
     })
@@ -32,50 +95,12 @@ const Footer = ({ onUpload, onBeforeUpload, onDownload, onDownloadCsv, }) => {
         <span style={{ color: 'gray' }}>© 2021 apple-bit</span>
       </div>
       <div style={{ textAlign: 'right' }}>
-        <Popconfirm 
-          title="This will export a CSV file of your data"
-          icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-          onConfirm={ onDownloadCsv }
-        >
-          <Button 
-            size="small"
-            shape="round" 
-            style={{ marginRight: '10px', marginBottom: '5px' }}
-            icon={<CloudDownloadOutlined />} 
-          >
-            .csv
-          </Button>
-        </Popconfirm>
-        <Popconfirm 
-          title="This will export a JSON file of your data"
-          icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-          onConfirm={ onDownload }
-        >
-          <Button 
-            size="small"
-            shape="round" 
-            style={{ marginRight: '10px', marginBottom: '5px' }}
-            icon={<CloudDownloadOutlined />} 
-          >
-            .json
-          </Button>
-        </Popconfirm>
-        <Upload 
-          name="players_json"
-          accept=".json"
-          maxCount={1}
-          action={ onUpload }
-          beforeUpload={ onBeforeUpload }
-          showUploadList={ false }
-        >
-          <Button 
-            size="small"
-            shape="round" 
-            icon={<UploadOutlined />}
-          >
-            Import (JSON)
-          </Button>
-        </Upload>
+        <Button 
+          shape="circle" 
+          style={{ marginRight: '10px', marginBottom: '5px' }}
+          icon={<SettingOutlined />}
+          onClick={ handleSettings } 
+        />
       </div>
     </div>
   )
