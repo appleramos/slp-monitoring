@@ -5,14 +5,17 @@ import { filter, } from 'lodash'
 
 import { Table, Tag, Tooltip, } from 'antd'
 import { PlayersContext } from '../contexts/PlayersContext'
+import { SettingsContext } from '../contexts/SettingsContext'
 import SlpIcon from './slp-icon.png'
 
 const PlayerEarningsTable = () => {
   const {
 		players,
     playersData,
-    slpRatePeso,
 	} = useContext(PlayersContext)
+  const {
+    slpRatePeso,
+	} = useContext(SettingsContext)
 
   const renderPlayer = (name, player) => {
     const {

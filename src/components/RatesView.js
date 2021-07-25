@@ -3,8 +3,9 @@ import numeral from 'numeral'
 
 import { Radio, Typography, Skeleton, } from 'antd'
 
-import { PlayersContext } from '../contexts/PlayersContext'
 import DataView from './DataView'
+import CoingeckoIcon from './coin-gecko.png'
+import { SettingsContext } from '../contexts/SettingsContext'
 
 const { Paragraph, Title, } = Typography
 
@@ -14,8 +15,10 @@ const RatesView = () => {
     setSlpRatePeso,
     earningsUnit,
     setEarningsUnit,
+    totalToggle,
+    setTotalToggle,
     slpRateLoading,
-	} = useContext(PlayersContext)
+	} = useContext(SettingsContext)
 
   const updateSlpRatePeso = (rateText) => {
     if (rateText !== '') {
@@ -28,19 +31,30 @@ const RatesView = () => {
      setEarningsUnit(e.target.value)
   }
 
+  const handleTotalToggleChange = (e) => {
+    setTotalToggle(e.target.value)
+  }
+
   const earningsOptions = [
     { label: 'Peso', value: 'peso' },
     { label: 'SLP', value: 'slp' },
   ]
 
+  const totalOptions = [
+    { label: 'All', value: 'all' },
+    { label: 'Claimable', value: 'claimable' },
+  ]
+
   return (
-    <div style={{ marginBottom: '10px', display: 'flex' }}>
-      <div>
-        <div style={{ marginRight: '50px', color: 'gray' }}>SLP Rate in Peso</div>
+    <div>
+      <div style={{ marginRight: '15px' }}>
+        <div style={{ marginRight: '50px', color: 'gray' }}>SLP Rate</div>
         { slpRateLoading ?
           <Skeleton.Input style={{ width: 40 }} active={ true } size="small" />
           :
-          <div>
+          <div style={{ display: 'flex' }}>
+            <img alt="CoinGecko Icon" src={ CoingeckoIcon } style={{ width: '26px', height: '26px', marginRight: '10px' }}/>
+            <h4>PHP</h4>
             <Title level={4}>
               <Paragraph 
                 editable={{ onChange: updateSlpRatePeso }}
@@ -48,20 +62,30 @@ const RatesView = () => {
                 { numeral(slpRatePeso).format('0,0.00') }
               </Paragraph>
             </Title>
-            {/* <Title level={4}>
-              { `PHP ${numeral(slpRatePeso).format('0,0.00')}` }
-            </Title> */}
           </div>
         }
       </div>
-      <div>
+      <div style={{ marginBottom: '10px', display: 'flex' }}>
         <DataView 
+          style={{ marginRight: '25px' }}
           title="Earnings Unit"
           value={
             <Radio.Group
               options={ earningsOptions }
               onChange={ handleEarningsUnitChange }
               value={ earningsUnit }
+              optionType="button"
+              buttonStyle="solid"
+            />
+          }
+        />
+        <DataView 
+          title="Total"
+          value={
+            <Radio.Group
+              options={ totalOptions }
+              onChange={ handleTotalToggleChange }
+              value={ totalToggle }
               optionType="button"
               buttonStyle="solid"
             />

@@ -3,22 +3,33 @@ import { filter } from 'lodash'
 import numeral from 'numeral'
 
 import { PlayersContext } from '../contexts/PlayersContext'
+import { SettingsContext } from '../contexts/SettingsContext'
 import DataView from './DataView'
 
 const EarningsSummary = () => {
   const {
 		players,
     playersData,
+	} = useContext(PlayersContext)
+  const {
     slpRatePeso,
     earningsUnit,
-	} = useContext(PlayersContext)
+    totalToggle,
+	} = useContext(SettingsContext)
+
+  const isClaimableToggle = totalToggle === 'claimable'
 
   const getIskosTotalEarnings = () => {
     let total = 0
     const iskos = filter(players.value, { type: 'Isko' })
     iskos.forEach(isko => {
       const { isko_share, address } = isko
-      const pData = filter(playersData, p => p.id.toLowerCase() === address.toLowerCase())
+      const pData = filter(playersData, p => {
+        if (isClaimableToggle) {
+          return p.id.toLowerCase() === address.toLowerCase() && p.isClaimable
+        }
+        return p.id.toLowerCase() === address.toLowerCase()
+      })
       if (pData.length > 0) {
         const iskoSlpShare = pData[0].total * (isko_share / 100)
         total += iskoSlpShare
@@ -34,7 +45,12 @@ const EarningsSummary = () => {
     let total = 0
     players.value.forEach(player => {
       const { address, type, isko_share, } = player
-      const pData = filter(playersData, p => p.id.toLowerCase() === address.toLowerCase())
+      const pData = filter(playersData, p => { 
+        if (isClaimableToggle) {
+          return p.id.toLowerCase() === address.toLowerCase() && p.isClaimable
+        }
+        return p.id.toLowerCase() === address.toLowerCase()
+      })
       if (pData.length > 0) {
         if (type === 'Isko') {
           const managersShare = 100 - isko_share
@@ -60,7 +76,7 @@ const EarningsSummary = () => {
           style={{ marginRight: '20px' }}
         />
         <DataView 
-          title="Iskos' Total Earnings"
+          title="Scholar's Total Earnings"
           value={ getIskosTotalEarnings() }
         />
       </div>

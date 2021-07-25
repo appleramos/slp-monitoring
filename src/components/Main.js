@@ -5,19 +5,15 @@ import moment from 'moment'
 import numeral from 'numeral'
 import ObjectsToCsv from 'node-create-csv'
 
-import { Button, message, Tabs, Upload, } from 'antd'
-import { 
-  RedoOutlined, 
-  PlusOutlined, 
-} from '@ant-design/icons'
+import { message, Upload, } from 'antd'
 
 import { PlayersContext } from '../contexts/PlayersContext'
+import { SettingsContext } from '../contexts/SettingsContext'
 import UserInput from './UserInput'
-import PlayerMonitoringTable from './PlayerMonitoringTable'
-import EarningsView from './EarningsView';
 import Footer from './Footer'
-
-const { TabPane } = Tabs
+import Header from './Header'
+import TrackerTable from './TrackerTable'
+import EarningsView from './EarningsView'
 
 function Main() {
   const {
@@ -27,10 +23,12 @@ function Main() {
     setPlayersData,
     selectedPlayer,
     setSelectedPlayer,
+	} = useContext(PlayersContext)
+  const {
     setSlpRatePeso,
     slpRatePeso,
     setSlpRateLoading,
-	} = useContext(PlayersContext)
+	} = useContext(SettingsContext)
   const slpRatePesoStorage = window.localStorage.getItem('slpRatePeso') || 1
   const [ tableLoading, setTableLoading ] = useState(true)
   const [ isFormVisible, setIsFormVisible ] = useState(false)
@@ -83,7 +81,8 @@ function Main() {
             lockedSlp: locked,
             lastClaimedAt: getLastClaimDate(last_claimed_item_at),
             dailyAvg: getDailyAvg(last_claimed_item_at, locked),
-            nextClaimDate: getNextClaimDate(last_claimed_item_at)
+            nextClaimDate: getNextClaimDate(last_claimed_item_at),
+            isClaimable: moment().isSameOrAfter(getNextClaimDate(last_claimed_item_at)),
           })
         }
       } catch (err) {
@@ -98,9 +97,10 @@ function Main() {
             total: 0,
             claimable: 0,
             lockedSlp: 0,
-            lastClaimedAt: moment().format('LLL'),
+            lastClaimedAt: moment(),
             dailyAvg: 0,
-            nextClaimDate: moment().format('LLL')
+            nextClaimDate: moment(),
+            isClaimable: false,
           })
         }
       }
@@ -135,14 +135,14 @@ function Main() {
       return '-'
     }
     const lastClaimDate = moment(new Date(lastClaimedAt * 1000))
-    return lastClaimDate.add(14, 'days').format('LLL')
+    return lastClaimDate.add(14, 'days')
   }
 
   const getLastClaimDate = (date) => {
     if (date === 0) {
       return '-'
     }
-    return moment(new Date(date * 1000)).format('LLL')
+    return moment(new Date(date * 1000))
   }
 
   const handleDeletePlayer = (player) => {
@@ -184,7 +184,8 @@ function Main() {
             lockedSlp: locked,
             lastClaimedAt: getLastClaimDate(last_claimed_item_at),
             dailyAvg: getDailyAvg(last_claimed_item_at, locked),
-            nextClaimDate: getNextClaimDate(last_claimed_item_at)
+            nextClaimDate: getNextClaimDate(last_claimed_item_at),
+            isClaimable: moment().isSameOrAfter(getNextClaimDate(last_claimed_item_at)),
           }
 
           if (selectedPlayer.name) {
@@ -209,7 +210,7 @@ function Main() {
         setPlayers(newPlayers)
       })
       .catch(err => {
-        message.error('You entered an invalid etherium address')
+        message.error('You entered an invalid ronin address')
         setTableLoading(false)
       })
       setIsFormVisible(false)
@@ -284,36 +285,16 @@ function Main() {
         margin: 'auto',
       }}
     >
-      <div
-        style={{
-          fontSize: '1.5em',
-          fontWeight: 'bold',
-          marginBottom: '10px',
-          display: 'flex'
-        }}
-      >
-        <div style={{ flexGrow: '3' }}>
-          <span>SLP Tracker</span>
-        </div>
-        <div style={{ textAlign: 'right' }}>
-          <Button 
-            size="large"
-            shape="circle" 
-            icon={<RedoOutlined />} 
-            style={{ marginRight: '10px', marginBottom: '5px' }}
-            onClick={ handleReload }
-          />
-          <Button 
-            size="large"
-            type="primary" 
-            shape="round" 
-            icon={<PlusOutlined />} 
-            onClick={ handleOpenForm }
-          >
-            Player
-          </Button>
-        </div>
-      </div>
+      <Header 
+        onOpenForm={ handleOpenForm }
+        onReload={ handleReload }
+      />
+      <EarningsView />
+      <TrackerTable 
+        loading={ tableLoading }
+        onDelete={ handleDeletePlayer }
+        onEdit={ handleEditPlayer }
+      />
       { isFormVisible &&
         <UserInput 
           onSubmit={ handleSubmit } 
@@ -322,18 +303,6 @@ function Main() {
           selectedPlayer={ selectedPlayer }
         />
       }
-      <Tabs defaultActiveKey="1" style={{ paddingBottom: '60px' }}>
-        <TabPane tab="Monitoring" key="1">
-          <PlayerMonitoringTable 
-            loading={ tableLoading }
-            onDelete={ handleDeletePlayer }
-            onEdit={ handleEditPlayer }
-          />
-        </TabPane>
-        <TabPane tab="Estimate Earnings" key="2">
-          <EarningsView />
-        </TabPane>
-      </Tabs>
       <Footer 
         onBeforeUpload={ handleBeforeUpload }
         onUpload={ handleUpload }
