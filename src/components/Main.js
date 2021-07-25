@@ -5,17 +5,14 @@ import moment from 'moment'
 import numeral from 'numeral'
 import ObjectsToCsv from 'node-create-csv'
 
-import { Button, message, Tabs, Upload, } from 'antd'
-import { 
-  RedoOutlined, 
-  PlusOutlined, 
-} from '@ant-design/icons'
+import { message, Tabs, Upload, } from 'antd'
 
 import { PlayersContext } from '../contexts/PlayersContext'
 import UserInput from './UserInput'
 import PlayerMonitoringTable from './PlayerMonitoringTable'
 import EarningsView from './EarningsView';
 import Footer from './Footer'
+import Header from './Header'
 
 const { TabPane } = Tabs
 
@@ -203,7 +200,7 @@ function Main() {
         setPlayers(newPlayers)
       })
       .catch(err => {
-        message.error('You entered an invalid etherium address')
+        message.error('You entered an invalid ronin address')
         setTableLoading(false)
       })
       setIsFormVisible(false)
@@ -278,36 +275,10 @@ function Main() {
         margin: 'auto',
       }}
     >
-      <div
-        style={{
-          fontSize: '1.5em',
-          fontWeight: 'bold',
-          marginBottom: '10px',
-          display: 'flex'
-        }}
-      >
-        <div style={{ flexGrow: '3' }}>
-          <span>SLP Tracker</span>
-        </div>
-        <div style={{ textAlign: 'right' }}>
-          <Button 
-            size="large"
-            shape="circle" 
-            icon={<RedoOutlined />} 
-            style={{ marginRight: '10px', marginBottom: '5px' }}
-            onClick={ handleReload }
-          />
-          <Button 
-            size="large"
-            type="primary" 
-            shape="round" 
-            icon={<PlusOutlined />} 
-            onClick={ handleOpenForm }
-          >
-            Player
-          </Button>
-        </div>
-      </div>
+      <Header 
+        onOpenForm={ handleOpenForm }
+        onReload={ handleReload }
+      />
       { isFormVisible &&
         <UserInput 
           onSubmit={ handleSubmit } 
