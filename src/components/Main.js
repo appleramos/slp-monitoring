@@ -72,6 +72,7 @@ function Main() {
             last_claimed_item_at,
           } = res.data
           const locked = total - claimable_total
+          const isClaimable = last_claimed_item_at === 0 ? false : moment().isSameOrAfter(getNextClaimDate(last_claimed_item_at))
           newPlayersData.push({
             id: client_id,
             nickname: player.name,
@@ -82,7 +83,7 @@ function Main() {
             lastClaimedAt: getLastClaimDate(last_claimed_item_at),
             dailyAvg: getDailyAvg(last_claimed_item_at, locked),
             nextClaimDate: getNextClaimDate(last_claimed_item_at),
-            isClaimable: moment().isSameOrAfter(getNextClaimDate(last_claimed_item_at)),
+            isClaimable,
           })
         }
       } catch (err) {
@@ -132,7 +133,7 @@ function Main() {
 
   const getNextClaimDate = (lastClaimedAt) => {
     if (lastClaimedAt === 0) {
-      return '-'
+      return 0
     }
     const lastClaimDate = moment(new Date(lastClaimedAt * 1000))
     return lastClaimDate.add(14, 'days')
@@ -140,7 +141,7 @@ function Main() {
 
   const getLastClaimDate = (date) => {
     if (date === 0) {
-      return '-'
+      return 0
     }
     return moment(new Date(date * 1000))
   }
@@ -175,6 +176,7 @@ function Main() {
             last_claimed_item_at,
           } = res.data
           const locked = total - claimable_total
+          const isClaimable = last_claimed_item_at === 0 ? false : moment().isSameOrAfter(getNextClaimDate(last_claimed_item_at))
           const playerData = {
             id: client_id,
             nickname: player.name,
@@ -185,7 +187,7 @@ function Main() {
             lastClaimedAt: getLastClaimDate(last_claimed_item_at),
             dailyAvg: getDailyAvg(last_claimed_item_at, locked),
             nextClaimDate: getNextClaimDate(last_claimed_item_at),
-            isClaimable: moment().isSameOrAfter(getNextClaimDate(last_claimed_item_at)),
+            isClaimable,
           }
 
           if (selectedPlayer.name) {
