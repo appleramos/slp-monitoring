@@ -3,10 +3,9 @@ import numeral from 'numeral'
 
 import { Radio, Typography, Skeleton, } from 'antd'
 
-import { PlayersContext } from '../contexts/PlayersContext'
 import DataView from './DataView'
-import SlpIcon from './slp-icon.png'
 import CoingeckoIcon from './coin-gecko.png'
+import { SettingsContext } from '../contexts/SettingsContext'
 
 const { Paragraph, Title, } = Typography
 
@@ -16,8 +15,10 @@ const RatesView = () => {
     setSlpRatePeso,
     earningsUnit,
     setEarningsUnit,
+    totalToggle,
+    setTotalToggle,
     slpRateLoading,
-	} = useContext(PlayersContext)
+	} = useContext(SettingsContext)
 
   const updateSlpRatePeso = (rateText) => {
     if (rateText !== '') {
@@ -30,13 +31,22 @@ const RatesView = () => {
      setEarningsUnit(e.target.value)
   }
 
+  const handleTotalToggleChange = (e) => {
+    setTotalToggle(e.target.value)
+  }
+
   const earningsOptions = [
     { label: 'Peso', value: 'peso' },
     { label: 'SLP', value: 'slp' },
   ]
 
+  const totalOptions = [
+    { label: 'All', value: 'all' },
+    { label: 'Claimable', value: 'claimable' },
+  ]
+
   return (
-    <div style={{ marginBottom: '10px', display: 'flex' }}>
+    <div>
       <div style={{ marginRight: '15px' }}>
         <div style={{ marginRight: '50px', color: 'gray' }}>SLP Rate</div>
         { slpRateLoading ?
@@ -55,14 +65,27 @@ const RatesView = () => {
           </div>
         }
       </div>
-      <div>
+      <div style={{ marginBottom: '10px', display: 'flex' }}>
         <DataView 
+          style={{ marginRight: '25px' }}
           title="Earnings Unit"
           value={
             <Radio.Group
               options={ earningsOptions }
               onChange={ handleEarningsUnitChange }
               value={ earningsUnit }
+              optionType="button"
+              buttonStyle="solid"
+            />
+          }
+        />
+        <DataView 
+          title="Total"
+          value={
+            <Radio.Group
+              options={ totalOptions }
+              onChange={ handleTotalToggleChange }
+              value={ totalToggle }
               optionType="button"
               buttonStyle="solid"
             />
