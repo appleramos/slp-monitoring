@@ -1,22 +1,13 @@
 import React from 'react'
 import DataView from './DataView'
-import GCash from './gcash.jpg'
 const DonationView = () => {
   return (
     <div>
       <DataView 
-        title="Ronin Address [apple-bit]"
-        value="ronin:786521e1ef005f71b9b454e6e4be48bdc645a3c6"
+        title="Ronin Address [apple-bit | AxieLog01]"
+        value="ronin:73d68a12fcede1b6a4ce3189dbefc89a10fafaff"
         level={ 5 }
         style={{ marginTop: '20px' }}
-      />
-      <DataView 
-        title="GCash"
-        style={{ marginTop: '20px' }}
-        value={
-          <img alt="GCash QR" src={ GCash } style={{ width: '50%' }}/>
-        }
-        level={ 5 }
       />
       <DataView 
         title="Developer"
