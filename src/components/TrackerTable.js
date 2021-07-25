@@ -51,7 +51,14 @@ const TrackerTable = ({ loading, onDelete, onEdit, }) => {
     const firstDigits = address.substring(0, 11)
     const lastDigits = address.substring(address.length - 5, address.length)
 
-    return <Paragraph copyable={{ text: address.toLowerCase() }}>{ `${firstDigits}...${lastDigits}` }</Paragraph>
+    return (
+      <Paragraph 
+        copyable={{ text: address.toLowerCase() }}
+        style={{ color: '#a0a0a0' }}
+      >
+        { `${firstDigits}...${lastDigits}` }
+      </Paragraph>
+    )
   }
 
   const renderPlayer = (name, player) => {
@@ -63,7 +70,7 @@ const TrackerTable = ({ loading, onDelete, onEdit, }) => {
     } = player
 
     let playerType = type || 'Manager'
-    let color = playerType === 'Manager' ? 'gold' : 'cyan'
+    let color = playerType === 'Manager' ? '#483e2b' : '#326379'
     if (isNaN(isko_share) || !isko_share) {
       isko_share = 0
     }

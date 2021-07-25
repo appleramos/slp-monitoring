@@ -86,13 +86,13 @@ const Footer = ({ onUpload, onBeforeUpload, onDownload, onDownloadCsv, }) => {
       display: 'flex',
       position: 'fixed',
       bottom: 0,
-      backgroundColor: 'white',
+      backgroundColor: '#242835',
       width: '100%',
       left: 0,
       padding: '11px 15px', 
     }}>
       <div style={{ flexGrow: 3 }}>
-        <span style={{ color: 'gray' }}>© 2021 apple-bit</span>
+        <span style={{ color: '#a0a0a0' }}>© 2021 apple-bit</span>
       </div>
       <div style={{ textAlign: 'right' }}>
         <Button 

@@ -54,9 +54,10 @@ const RatesView = () => {
           :
           <div style={{ display: 'flex' }}>
             <img alt="CoinGecko Icon" src={ CoingeckoIcon } style={{ width: '26px', height: '26px', marginRight: '10px' }}/>
-            <h4>PHP</h4>
+            <h4 style={{ color: 'white' }}>PHP</h4>
             <Title level={4}>
               <Paragraph 
+                style={{ color: 'white' }}
                 editable={{ onChange: updateSlpRatePeso }}
               >
                 { numeral(slpRatePeso).format('0,0.00') }

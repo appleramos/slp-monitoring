@@ -1,3 +1,8 @@
+#root {
+  background-color: #242835;
+  color: white;
+}
+
 .App {
   text-align: center;
 }
@@ -31,8 +36,64 @@
 .ant-table-wrapper {
   table {
     font-size: 0.9em;
+    background-color: #242835;
+    color: white;
+  }
+  .ant-table-thead > tr > th {
+    background-color: #242835;
+    color: white;
+    border-bottom: 1px solid #4f576b;
+  }
+  .ant-table-tbody > tr > td {
+    border-bottom: 1px solid #2e333e;
+  }
+  .ant-table-tbody > tr.ant-table-row:hover > td {
+    background: #323744;
   }
 }
+
+.ant-radio-button-wrapper {
+  background: #242935 !important;
+  border: 1px solid #353535 !important;
+  color: white !important;
+  .ant-radio-button.ant-radio-button-checked {
+    background-color: #649ed5;
+  }
+}
+
+.ant-pagination-item-link {
+  color: #fff !important;
+  background-color: #425994 !important;
+  border: 1px solid #425894 !important;
+}
+
+.ant-pagination-disabled {
+  opacity: 50%;
+}
+
+.ant-pagination-item {
+  background: #3f4c6b !important;
+  border-color: #639fd6 !important;
+  &.ant-pagination-item-active {
+    background: #639fd6 !important;
+  }
+
+  a {
+    color: white !important;
+  }
+}
+
+.ant-btn.ant-btn-circle {
+  color: white;
+  background: #242935;
+  border-color: white;
+
+  &:hover, &:focus, &:active {
+    background: #649ed5 !important;
+    color: white !important;
+  }
+}
+
 
 @keyframes App-logo-spin {
   from {
