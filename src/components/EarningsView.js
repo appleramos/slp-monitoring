@@ -1,6 +1,6 @@
 import React from 'react'
 import EarningsSummary from './EarningsSummary'
-import PlayerEarningsTable from './PlayerEarningsTable'
+// import PlayerEarningsTable from './PlayerEarningsTable'
 import RatesView from './RatesView'
 
 const EarningsView = () => {
@@ -8,7 +8,7 @@ const EarningsView = () => {
     <div>
       <RatesView />
       <EarningsSummary />
-      <PlayerEarningsTable />
+      {/* <PlayerEarningsTable /> */}
     </div>
   )
 }

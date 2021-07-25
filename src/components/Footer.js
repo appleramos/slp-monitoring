@@ -29,13 +29,7 @@ const Footer = ({ onUpload, onBeforeUpload, onDownload, onDownloadCsv, }) => {
       padding: '11px 15px', 
     }}>
       <div style={{ flexGrow: 3 }}>
-        <span style={{ color: 'gray' }}>© 2021 Apple Ramos&nbsp;&nbsp;&nbsp;|</span>
-        <Button             
-          type="link" 
-          onClick={ handleDonate }
-        >
-          Donate
-        </Button>
+        <span style={{ color: 'gray' }}>© 2021 apple-bit</span>
       </div>
       <div style={{ textAlign: 'right' }}>
         <Popconfirm 

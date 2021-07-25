@@ -5,6 +5,8 @@ import { Radio, Typography, Skeleton, } from 'antd'
 
 import { PlayersContext } from '../contexts/PlayersContext'
 import DataView from './DataView'
+import SlpIcon from './slp-icon.png'
+import CoingeckoIcon from './coin-gecko.png'
 
 const { Paragraph, Title, } = Typography
 
@@ -35,12 +37,14 @@ const RatesView = () => {
 
   return (
     <div style={{ marginBottom: '10px', display: 'flex' }}>
-      <div>
-        <div style={{ marginRight: '50px', color: 'gray' }}>SLP Rate in Peso</div>
+      <div style={{ marginRight: '15px' }}>
+        <div style={{ marginRight: '50px', color: 'gray' }}>SLP Rate</div>
         { slpRateLoading ?
           <Skeleton.Input style={{ width: 40 }} active={ true } size="small" />
           :
           <div>
+            <img alt="CoinGecko Icon" src={ CoingeckoIcon } style={{ width: '26px', height: '26px', marginRight: '10px' }}/>
+            <h4>PHP</h4>
             <Title level={4}>
               <Paragraph 
                 editable={{ onChange: updateSlpRatePeso }}
@@ -48,9 +52,6 @@ const RatesView = () => {
                 { numeral(slpRatePeso).format('0,0.00') }
               </Paragraph>
             </Title>
-            {/* <Title level={4}>
-              { `PHP ${numeral(slpRatePeso).format('0,0.00')}` }
-            </Title> */}
           </div>
         }
       </div>

@@ -5,16 +5,14 @@ import moment from 'moment'
 import numeral from 'numeral'
 import ObjectsToCsv from 'node-create-csv'
 
-import { message, Tabs, Upload, } from 'antd'
+import { message, Upload, } from 'antd'
 
 import { PlayersContext } from '../contexts/PlayersContext'
 import UserInput from './UserInput'
-import PlayerMonitoringTable from './PlayerMonitoringTable'
-import EarningsView from './EarningsView';
 import Footer from './Footer'
 import Header from './Header'
-
-const { TabPane } = Tabs
+import TrackerTable from './TrackerTable'
+import EarningsView from './EarningsView'
 
 function Main() {
   const {
@@ -95,9 +93,9 @@ function Main() {
             total: 0,
             claimable: 0,
             lockedSlp: 0,
-            lastClaimedAt: moment().format('LLL'),
+            lastClaimedAt: moment(),
             dailyAvg: 0,
-            nextClaimDate: moment().format('LLL')
+            nextClaimDate: moment()
           })
         }
       }
@@ -132,14 +130,14 @@ function Main() {
       return '-'
     }
     const lastClaimDate = moment(new Date(lastClaimedAt * 1000))
-    return lastClaimDate.add(14, 'days').format('LLL')
+    return lastClaimDate.add(14, 'days')
   }
 
   const getLastClaimDate = (date) => {
     if (date === 0) {
       return '-'
     }
-    return moment(new Date(date * 1000)).format('LLL')
+    return moment(new Date(date * 1000))
   }
 
   const handleDeletePlayer = (player) => {
@@ -285,6 +283,12 @@ function Main() {
         onOpenForm={ handleOpenForm }
         onReload={ handleReload }
       />
+      <EarningsView />
+      <TrackerTable 
+        loading={ tableLoading }
+        onDelete={ handleDeletePlayer }
+        onEdit={ handleEditPlayer }
+      />
       { isFormVisible &&
         <UserInput 
           onSubmit={ handleSubmit } 
@@ -293,7 +297,7 @@ function Main() {
           selectedPlayer={ selectedPlayer }
         />
       }
-      <Tabs defaultActiveKey="1" style={{ paddingBottom: '60px' }}>
+      {/* <Tabs defaultActiveKey="1" style={{ paddingBottom: '60px' }}>
         <TabPane tab="Monitoring" key="1">
           <PlayerMonitoringTable 
             loading={ tableLoading }
@@ -304,7 +308,7 @@ function Main() {
         <TabPane tab="Estimate Earnings" key="2">
           <EarningsView />
         </TabPane>
-      </Tabs>
+      </Tabs> */}
       <Footer 
         onBeforeUpload={ handleBeforeUpload }
         onUpload={ handleUpload }
