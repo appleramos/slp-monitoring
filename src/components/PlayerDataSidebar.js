@@ -30,7 +30,6 @@ const PlayerDataSidebar = () => {
   } = selectedPlayerData
 
   useEffect(() => {
-    console.log(selectedPlayerData)
     getPlayerAxies()
     if (!!id) {
       if (!playerGameData && !loading && isPlayerDataSidebarVisible) {
@@ -39,7 +38,6 @@ const PlayerDataSidebar = () => {
           .then(res => {
             setLoading(false)
             setPlayerGameData(res.data)
-            console.log(res.data)
           })
       }
     }
@@ -82,10 +80,11 @@ const PlayerDataSidebar = () => {
   return (
     <Drawer
       title={ nickname }
-      width="100%"
+      height="560px"
       placement="right"
       onClose={ handleClose }
       visible={ isPlayerDataSidebarVisible }
+      placement="bottom"
     >
       { loading ?
         <Spin/>
