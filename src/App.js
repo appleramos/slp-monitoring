@@ -6,22 +6,25 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import Main from './components/Main'
 import { PlayersContextProvider } from './contexts/PlayersContext'
 import { SettingsContextProvider } from './contexts/SettingsContext'
+import { PageContextProvider } from './contexts/PageContext'
 
 function App() {
   return (
     <Router>
-      <SettingsContextProvider>
-        <PlayersContextProvider>
-          <Switch>
-            <Route
-              exact
-              path="/monitoring"
-              component={ Main }
-            />
-            <Redirect to="/monitoring"/>
-          </Switch>
-        </PlayersContextProvider>
-      </SettingsContextProvider>
+      <PageContextProvider>
+        <SettingsContextProvider>
+          <PlayersContextProvider>
+            <Switch>
+              <Route
+                exact
+                path="/monitoring"
+                component={ Main }
+              />
+              <Redirect to="/monitoring"/>
+            </Switch>
+          </PlayersContextProvider>
+        </SettingsContextProvider>
+      </PageContextProvider>
     </Router>
   )
 }

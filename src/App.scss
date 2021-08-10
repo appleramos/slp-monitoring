@@ -94,6 +94,74 @@ body {
   }
 }
 
+.ant-drawer {
+  .ant-drawer-close {
+    svg {
+      color: #fff;
+    }
+  }
+  .ant-drawer-body {
+    background-color: #252735;
+  }
+  .ant-drawer-header {
+    background-color: #252735;
+    border-bottom: 0;
+    .ant-drawer-title {
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.6em;
+    }
+  }
+  .ant-spin {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
+}
+
+.player-data-view {
+  display: flex;
+  border: 1px solid #3f404c;
+  width: fit-content;
+  padding: 10px 13px;
+  border-radius: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  .data-iconn {
+    font-size: 1.2em;
+    margin-right: 10px;
+  }
+  img {
+    width: 29px;
+    margin-right: 10px;
+  }
+  .data-label {
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+}
+
+.axie-container {
+  border: 1px solid #393b46;
+  background-color: #292b39;
+  border-radius: 10px;
+  margin: 0 15px 15px 0;
+  text-align: center;
+  padding: 10px 20px;
+  .axie-img {
+    width: 150px;
+  }
+}
+
+.m-lbl {
+  font-size: 1.2em;
+}
+
+.font-weight-bold {
+  font-weight: bold;
+}
+
 
 @keyframes App-logo-spin {
   from {

@@ -14,6 +14,7 @@ import Footer from './Footer'
 import Header from './Header'
 import TrackerTable from './TrackerTable'
 import EarningsView from './EarningsView'
+import PlayerDataSidebar from './PlayerDataSidebar'
 
 function Main() {
   const {
@@ -305,6 +306,7 @@ function Main() {
           selectedPlayer={ selectedPlayer }
         />
       }
+      <PlayerDataSidebar />
       <Footer 
         onBeforeUpload={ handleBeforeUpload }
         onUpload={ handleUpload }

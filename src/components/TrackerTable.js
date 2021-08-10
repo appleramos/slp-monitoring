@@ -7,6 +7,7 @@ import { Table, Popconfirm, Button, Typography, Tag, Tooltip, } from 'antd'
 import { DeleteOutlined, QuestionCircleOutlined, EditOutlined, } from '@ant-design/icons'
 import { PlayersContext } from '../contexts/PlayersContext'
 import { SettingsContext } from '../contexts/SettingsContext'
+import { PageContext } from '../contexts/PageContext'
 import SlpIcon from './slp-icon.png'
 
 const { Paragraph } = Typography
@@ -15,10 +16,14 @@ const TrackerTable = ({ loading, onDelete, onEdit, }) => {
   const {
 		players,
     playersData,
+    setSelectedPlayerData,
 	} = useContext(PlayersContext)
   const {
     slpRatePeso,
 	} = useContext(SettingsContext)
+  const {
+    setPlayerDataSidebarVisibility,
+	} = useContext(PageContext)
 
   const getFromPlayersData = (ethAddress, dataKey, format) => {
     const playerData = filter(playersData, player => player.id.toLowerCase() === ethAddress.toLowerCase())
@@ -190,6 +195,12 @@ const TrackerTable = ({ loading, onDelete, onEdit, }) => {
     onDelete(player)
   }
 
+  const handleRowClick = (player) => {
+    const playerData = filter(playersData, p => p.id.toLowerCase() === player.address.toLowerCase())
+    setSelectedPlayerData(playerData[0])
+    setPlayerDataSidebarVisibility(true)
+  }
+
   const columns = [
     {
       title: '',
@@ -279,6 +290,11 @@ const TrackerTable = ({ loading, onDelete, onEdit, }) => {
         dataSource={ players.value }
         columns={ columns }
         scroll={{ x: 700 }}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: e => handleRowClick(record)
+          }
+        }}
       />
     </div>
   )
