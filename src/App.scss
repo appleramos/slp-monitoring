@@ -189,7 +189,7 @@ body {
     width: 30%;
   }
   .label {
-
+    font-size: 0.65em;
     &.aquatic {
       color: rgb(0, 184, 206);
     }
@@ -209,6 +209,122 @@ body {
       color: rgb(255, 83, 65);
     }
   }
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  .axie-card {
+    width: 150px;
+    margin-right: 32px;
+    margin-bottom: 24px;
+    img {
+      padding-left: 8.33%;
+    }
+    .card-name {
+      top: 5.5%;
+      left: 31%;
+      width: 59%;
+      height: 10%;
+      font-size: 9.77907px;
+    }
+    .card-description {
+      top: 68%;
+      left: 29%;
+      height: 28%;
+      font-size: 7.82325px;
+      width: 59%;
+      color: rgb(204, 204, 204);
+    }
+    .energy-label {
+      top: 2%;
+      left: 10%;
+      width: 22%;
+      height: 16%;
+      -webkit-text-stroke: 1px rgb(125, 69, 27);
+      font-size: 21.25px;
+    }
+    .effect-container {
+      width: 14%;
+      height: 11.5%;
+      top: 76%;
+      left: 10%;
+    }
+    .attack-container {
+      top: 20%;
+      left: 3%;
+      .attack-icon-container {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .attack-value {
+        top: 51%;
+        left: 54%;
+        transform: translate(-50%, -50%);
+        text-shadow: #83152b -2px 0px, #83152b 0px 2px, #83152b 2px 0px, #83152b 0px -2px;
+        font-size: 9.3846px;
+      }
+    }
+    .def-container {
+      top: 36%;
+      left: 3%;
+      .def-icon-container {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .def-value {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-shadow: #025959 -2px 0px, #025959 0px 2px, #025959 2px 0px, #025959 0px -2px;
+        font-size: 9.3846px;
+      }
+    }
+  }
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.relative {
+  position: relative;
+}
+
+.font-black {
+  font-weight: 900;
+}
+
+.absolute {
+  position: absolute;
+}
+.font-semibold {
+  font-weight: 600;
+}
+.justify-center {
+  justify-content: center;
+}
+.items-center {
+  align-items: center;
+}
+.flex {
+  display: flex;
+}
+.text-center {
+  text-align: center;
+}
+.w-full {
+  width: 100%;
+}
+
+.w-1\/2 {
+  width: 50%;
+}
+
+.w-1\/5 {
+  width: 20%;
 }
 
 .m-lbl {

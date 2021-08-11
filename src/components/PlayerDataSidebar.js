@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, } from 'react'
-import { Drawer, Spin, Skeleton, Typography, Switch, } from 'antd'
+import { Drawer, Spin, Skeleton, Typography, } from 'antd'
 import { AreaChartOutlined, RiseOutlined, } from '@ant-design/icons'
 import numeral from 'numeral'
 import axios from 'axios'
@@ -11,6 +11,7 @@ import { PlayersContext } from '../contexts/PlayersContext'
 import SlpIcon from './slp-icon.png'
 import PlayerData from './PlayerData'
 import Axie from './Axie'
+import AxieCardsDrawer from './AxieCardsDrawer'
 
 const { Paragraph } = Typography
 
@@ -144,13 +145,13 @@ const PlayerDataSidebar = () => {
                 <span>Axies</span>
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                { playerAxies.map(axie => <Axie data={axie}/>) }
+                { playerAxies.map(axie => <Axie data={axie} breedCount={ get(axie, 'breedCount', 0) }/>) }
               </div>
             </div>
           }
         </div>
       }
-      
+      <AxieCardsDrawer />
     </Drawer>
   )
 }

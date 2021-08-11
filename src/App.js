@@ -7,6 +7,7 @@ import Main from './components/Main'
 import { PlayersContextProvider } from './contexts/PlayersContext'
 import { SettingsContextProvider } from './contexts/SettingsContext'
 import { PageContextProvider } from './contexts/PageContext'
+import { AxieContextProvider } from './contexts/AxieContext'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <PageContextProvider>
         <SettingsContextProvider>
           <PlayersContextProvider>
+            <AxieContextProvider>
             <Switch>
               <Route
                 exact
@@ -22,6 +24,7 @@ function App() {
               />
               <Redirect to="/monitoring"/>
             </Switch>
+            </AxieContextProvider>
           </PlayersContextProvider>
         </SettingsContextProvider>
       </PageContextProvider>
