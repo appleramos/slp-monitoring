@@ -31,7 +31,7 @@ const AxieCardsDrawer = () => {
 
   const handleClose = () => {
     setShowCards(false)
-    console.log(axieCards)
+    setAxieCards()
   }
 
   const backCard = filter(axieCards, { type: 'Back' })[0]
@@ -56,7 +56,7 @@ const AxieCardsDrawer = () => {
       <div className="cards-container">
       {
         cards.map(card => (
-          <div>
+          <div key={ get(card, 'name') }>
             <div className="stat-label" style={{ textAlign: 'center', marginLeft: '-16px', marginBottom: '10px' }}>
               { get(card, 'name') }
             </div>
