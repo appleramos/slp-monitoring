@@ -3,14 +3,12 @@ import numeral from 'numeral'
 import moment from 'moment'
 import { filter, } from 'lodash'
 
-import { Table, Popconfirm, Button, Typography, Tag, Tooltip, } from 'antd'
+import { Table, Popconfirm, Button, Tag, Tooltip, } from 'antd'
 import { DeleteOutlined, QuestionCircleOutlined, EditOutlined, } from '@ant-design/icons'
 import { PlayersContext } from '../contexts/PlayersContext'
 import { SettingsContext } from '../contexts/SettingsContext'
 import { PageContext } from '../contexts/PageContext'
 import SlpIcon from './slp-icon.png'
-
-const { Paragraph } = Typography
 
 const TrackerTable = ({ loading, onDelete, onEdit, }) => {
   const {
@@ -57,12 +55,9 @@ const TrackerTable = ({ loading, onDelete, onEdit, }) => {
     const lastDigits = address.substring(address.length - 5, address.length)
 
     return (
-      <Paragraph 
-        copyable={{ text: address.toLowerCase() }}
-        style={{ color: '#a0a0a0' }}
-      >
+      <div style={{ color: '#a0a0a0' }}>
         { `${firstDigits}...${lastDigits}` }
-      </Paragraph>
+      </div>
     )
   }
 

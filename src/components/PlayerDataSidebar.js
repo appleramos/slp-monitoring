@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, } from 'react'
-import { Drawer, Spin, Skeleton, } from 'antd'
+import { Drawer, Spin, Skeleton, Typography, } from 'antd'
 import { AreaChartOutlined, RiseOutlined, } from '@ant-design/icons'
 import numeral from 'numeral'
 import axios from 'axios'
@@ -11,6 +11,8 @@ import { PlayersContext } from '../contexts/PlayersContext'
 import SlpIcon from './slp-icon.png'
 import PlayerData from './PlayerData'
 import Axie from './Axie'
+
+const { Paragraph } = Typography
 
 const PlayerDataSidebar = () => {
   const {
@@ -62,7 +64,23 @@ const PlayerDataSidebar = () => {
         setAxiesLoading(false)
       })
     }
-    
+  }
+  const renderAddress = () => {
+    if (id) {
+      const address = id.replace('0x', 'ronin:')
+      const firstDigits = address.substring(0, 11)
+      const lastDigits = address.substring(address.length - 8, address.length)
+
+      return (
+        <Paragraph 
+          copyable={{ text: address.toLowerCase() }}
+          style={{ color: '#a0a0a0' }}
+        >
+          { `${firstDigits}...${lastDigits}` }
+        </Paragraph>
+      )
+    }
+    return null
   }
 
   const handleClose = () => {
@@ -79,9 +97,13 @@ const PlayerDataSidebar = () => {
 
   return (
     <Drawer
-      title={ nickname }
+      title={ 
+        <div>
+          { nickname }
+          { renderAddress() }
+        </div> 
+      }
       height="560px"
-      placement="right"
       onClose={ handleClose }
       visible={ isPlayerDataSidebarVisible }
       placement="bottom"
@@ -116,7 +138,7 @@ const PlayerDataSidebar = () => {
           { (playerAxies && !axiesLoading) &&
             <div>
               <div className="font-weight-bold m-lbl" style={{ marginBottom: '10px', marginTop: '20px' }}>Axies</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              <div>
                 { playerAxies.map(axie => <Axie data={axie}/>) }
               </div>
             </div>
