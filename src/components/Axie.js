@@ -45,7 +45,10 @@ const Axie = ({ data }) => {
         <div className="font-weight-bold">{name}</div>
         <img src={ image } alt="Axie img" className="axie-img"/>
         <div style={{ textAlign: 'left' }}>
-          <div className="font-weight-bold" style={{ paddingBottom: '10px' }}>Stats</div>
+          <div className="stat-label">Breed Count</div>
+          <div>{ `${get(axieData, 'breedCount', 0)} / 7` }</div>
+        </div>
+        <div style={{ textAlign: 'left', marginTop: '15px' }}>
           <div style={{ display: 'flex' }}>
             <Stat 
               label="Health"
@@ -70,14 +73,76 @@ const Axie = ({ data }) => {
           </div>
         </div>
       </div>
-      {/* <div>
+      <div>
         { loading && <Skeleton /> }
         { (!loading && axieData) &&
-          <div>          
-            Test
+          <div className="genes-container">          
+            <div className="col">
+              <div className="stat-label">D</div>
+              <div className={ `${get(axieData, 'traits.eyes.d.class')} label`}>
+                { get(axieData, 'traits.eyes.d.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.ears.d.class')} label`}>
+                { get(axieData, 'traits.ears.d.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.mouth.d.class')} label`}>
+                { get(axieData, 'traits.mouth.d.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.horn.d.class')} label`}>
+                { get(axieData, 'traits.horn.d.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.back.d.class')} label`}>
+                { get(axieData, 'traits.back.d.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.tail.d.class')} label`}>
+                { get(axieData, 'traits.tail.d.name') }
+              </div>
+            </div>
+            <div className="col">
+              <div className="stat-label">R1</div>
+              <div className={ `${get(axieData, 'traits.eyes.r1.class')} label`}>
+                { get(axieData, 'traits.eyes.r1.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.ears.r1.class')} label`}>
+                { get(axieData, 'traits.ears.r1.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.mouth.r1.class')} label`}>
+                { get(axieData, 'traits.mouth.r1.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.horn.r1.class')} label`}>
+                { get(axieData, 'traits.horn.r1.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.back.r1.class')} label`}>
+                { get(axieData, 'traits.back.r1.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.tail.r1.class')} label`}>
+                { get(axieData, 'traits.tail.r1.name') }
+              </div>
+            </div>
+            <div className="col">
+              <div className="stat-label">R2</div>
+              <div className={ `${get(axieData, 'traits.eyes.r2.class')} label`}>
+                { get(axieData, 'traits.eyes.r2.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.ears.r2.class')} label`}>
+                { get(axieData, 'traits.ears.r2.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.mouth.r2.class')} label`}>
+                { get(axieData, 'traits.mouth.r2.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.horn.r2.class')} label`}>
+                { get(axieData, 'traits.horn.r2.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.back.r2.class')} label`}>
+                { get(axieData, 'traits.back.r2.name') }
+              </div>
+              <div className={ `${get(axieData, 'traits.tail.r2.class')} label`}>
+                { get(axieData, 'traits.tail.r2.name') }
+              </div>
+            </div>
           </div>
         }
-      </div> */}
+      </div>
     </div>
   )
 }

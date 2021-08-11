@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, } from 'react'
-import { Drawer, Spin, Skeleton, Typography, } from 'antd'
+import { Drawer, Spin, Skeleton, Typography, Switch, } from 'antd'
 import { AreaChartOutlined, RiseOutlined, } from '@ant-design/icons'
 import numeral from 'numeral'
 import axios from 'axios'
@@ -137,8 +137,13 @@ const PlayerDataSidebar = () => {
           }
           { (playerAxies && !axiesLoading) &&
             <div>
-              <div className="font-weight-bold m-lbl" style={{ marginBottom: '10px', marginTop: '20px' }}>Axies</div>
-              <div>
+              <div 
+                className="font-weight-bold m-lbl" 
+                style={{ marginBottom: '10px', marginTop: '20px' }}
+              >
+                <span>Axies</span>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 { playerAxies.map(axie => <Axie data={axie}/>) }
               </div>
             </div>

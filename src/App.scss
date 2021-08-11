@@ -152,8 +152,6 @@ body {
   border-radius: 10px;
   margin: 0 15px 15px 0;
   padding: 10px 20px;
-  display: flex;
-  flex-wrap: wrap;
   .axie-info {
     text-align: center;
     .axie-img {
@@ -162,6 +160,13 @@ body {
   }
 }
 
+.stat-label {
+  text-transform: uppercase;
+  font-size: 0.7em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #969696;
+}
 .axie-stat {
   padding-right: 15px;
   .icon-container {
@@ -175,12 +180,34 @@ body {
       height: 20px;
     }
   }
-  .stat-label {
-    text-transform: uppercase;
-    font-size: 0.7em;
-    font-weight: bold;
-    letter-spacing: 1px;
-    color: #969696;
+}
+
+.genes-container {
+  margin-top: 15px;
+  display: flex;
+  .col {
+    width: 30%;
+  }
+  .label {
+
+    &.aquatic {
+      color: rgb(0, 184, 206);
+    }
+    &.plant {
+      color: rgb(108, 192, 0);
+    }
+    &.beast {
+      color: rgb(255, 184, 18);
+    }
+    &.bird {
+      color: rgb(255, 139, 189);
+    }
+    &.reptile {
+      color: rgb(200, 138, 224);
+    }
+    &.bug {
+      color: rgb(255, 83, 65);
+    }
   }
 }
 
