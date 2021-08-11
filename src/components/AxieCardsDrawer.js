@@ -55,8 +55,8 @@ const AxieCardsDrawer = () => {
     >
       <div className="cards-container">
       {
-        cards.map(card => (
-          <div key={ get(card, 'name') }>
+        cards.map((card, i) => (
+          <div key={ `${get(card, 'name')}-${i}` }>
             <div className="stat-label" style={{ textAlign: 'center', marginLeft: '-16px', marginBottom: '10px' }}>
               { get(card, 'name') }
             </div>
@@ -69,7 +69,7 @@ const AxieCardsDrawer = () => {
               <div className="effect-container absolute flex justify-center items-center">
                 <img className="w-1/2" src={ get(card, 'abilities.0.effectIconUrl') } alt="effect-icon"/>
               </div>
-              <div class="card-name absolute flex justify-center items-center font-black">{ get(card, 'abilities.0.name') }</div>
+              <div className="card-name absolute flex justify-center items-center font-black">{ get(card, 'abilities.0.name') }</div>
               <div className="absolute w-1/5 attack-container">
                 <div className="w-full">
                   <img className="w-full" src={ getBgFromClass(get(card, 'class')) } alt="bg"/>
@@ -79,7 +79,7 @@ const AxieCardsDrawer = () => {
                   <div 
                     className="attack-value absolute w-full overflow-hidden text-center font-black" 
                   >
-                    75
+                    {get(card, 'abilities.0.attack')}
                   </div>
                 </div>
               </div>
@@ -92,7 +92,7 @@ const AxieCardsDrawer = () => {
                   <div 
                     className="def-value absolute w-full overflow-hidden text-center font-black" 
                   >
-                    75
+                    {get(card, 'abilities.0.defense')}
                   </div>
                 </div>
               </div>

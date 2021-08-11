@@ -145,7 +145,13 @@ const PlayerDataSidebar = () => {
                 <span>Axies</span>
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                { playerAxies.map(axie => <Axie data={axie} breedCount={ get(axie, 'breedCount', 0) }/>) }
+                { playerAxies.map((axie, i) => 
+                  <Axie 
+                    key={ `axie-${i}` }
+                    data={axie} 
+                    breedCount={ get(axie, 'breedCount', 0) }
+                  />) 
+                }
               </div>
             </div>
           }
