@@ -34,16 +34,20 @@ const PlayerDataSidebar = () => {
 
   useEffect(() => {
     getPlayerAxies()
-    if (!!id) {
-      if (!playerGameData && !loading && isPlayerDataSidebarVisible) {
-        setLoading(true)
-        axios(`https://api.lunaciarover.com/stats/${id}`)
-          .then(res => {
-            setLoading(false)
-            setPlayerGameData(res.data)
-          })
-      }
-    }
+    // if (!!id) {
+    //   if (!playerGameData && !loading && isPlayerDataSidebarVisible) {
+    //     setLoading(true)
+    //     axios(`https://cors-anywhere.herokuapp.com/https://axiesworld.firebaseapp.com/updateSpecific?wallet=${id}`)
+    //       .then(res => {
+    //         setLoading(false)
+    //         setPlayerGameData(res.data)
+    //       })
+    //       .catch(e => {
+    //         setLoading(false)
+    //         setPlayerGameData({})
+    //       })
+    //   }
+    // }
   })
 
   const getPlayerAxies = () => {
