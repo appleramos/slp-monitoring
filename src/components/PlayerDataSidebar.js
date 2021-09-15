@@ -118,7 +118,7 @@ const PlayerDataSidebar = () => {
         :
         <div>
           <div style={{ marginBottom: '20px' }}>
-            <div className="m-lbl font-weight-bold">{ get(playerGameData, 'ign', '' ) }</div>
+            <div className="m-lbl font-weight-bold">{ get(playerGameData, 'name', '' ) }</div>
             {/* <div style={{ color: 'gainsboro' }}>Last update: &nbsp;{ getLastUpdate() }</div> */}
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
