@@ -34,20 +34,20 @@ const PlayerDataSidebar = () => {
 
   useEffect(() => {
     getPlayerAxies()
-    // if (!!id) {
-    //   if (!playerGameData && !loading && isPlayerDataSidebarVisible) {
-    //     setLoading(true)
-    //     axios(`https://cors-anywhere.herokuapp.com/https://axiesworld.firebaseapp.com/updateSpecific?wallet=${id}`)
-    //       .then(res => {
-    //         setLoading(false)
-    //         setPlayerGameData(res.data)
-    //       })
-    //       .catch(e => {
-    //         setLoading(false)
-    //         setPlayerGameData({})
-    //       })
-    //   }
-    // }
+    if (!!id) {
+      if (!playerGameData && !loading && isPlayerDataSidebarVisible) {
+        setLoading(true)
+        axios(`https://game-api.axie.technology/api/v1/${id}`)
+          .then(res => {
+            setLoading(false)
+            setPlayerGameData(res.data)
+          })
+          .catch(e => {
+            setLoading(false)
+            setPlayerGameData({})
+          })
+      }
+    }
   })
 
   const getPlayerAxies = () => {
@@ -95,8 +95,8 @@ const PlayerDataSidebar = () => {
   }
 
   const getLastUpdate = () => {
-    const lastUpdateTS = get(playerGameData, 'updated_on')
-    const formatedDate = moment(new Date(lastUpdateTS * 1000)).format('MMM DD, hh:mm a')
+    const lastUpdateTS = get(playerGameData, 'cache_last_updated')
+    const formatedDate = moment(new Date(lastUpdateTS)).format('MMM DD, hh:mm a')
     return formatedDate
   }
 
@@ -119,7 +119,7 @@ const PlayerDataSidebar = () => {
         <div>
           <div style={{ marginBottom: '20px' }}>
             <div className="m-lbl font-weight-bold">{ get(playerGameData, 'ign', '' ) }</div>
-            <div style={{ color: 'gainsboro' }}>Last update: &nbsp;{ getLastUpdate() }</div>
+            {/* <div style={{ color: 'gainsboro' }}>Last update: &nbsp;{ getLastUpdate() }</div> */}
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             <PlayerData 
